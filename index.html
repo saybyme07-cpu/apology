@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – Let’s Make Things Right</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@600;700&family=Kaushan+Script&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Shared heart shape -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.5C5.5 17 2.5 13.2 2.5 9.2A5 5 0 0 1 12 6.6a5 5 0 0 1 9.5 2.6c0 4-3 7.800-9.500 12.300z"/></symbol>
+</svg>
+
+<!-- Decorative background -->
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+
+  <!-- floating hearts -->
+  <svg class="h float" style="left:20%;top:16%;width:54px;--r:-12deg"><use href="#heart"/></svg>
+  <svg class="h float d2" style="left:21%;top:28%;width:42px;--r:10deg"><use href="#heart"/></svg>
+  <svg class="h float d3" style="left:20%;top:52%;width:48px;--r:-8deg"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:6%;top:53%;width:54px"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:11%;top:71%;width:68px"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:27%;top:48%;width:36px"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:28%;top:12%;width:40px;opacity:.4"><use href="#heart"/></svg>
+  <svg class="h float d2" style="left:54%;top:7%;width:62px;--r:8deg"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:70%;top:11%;width:60px;opacity:.5"><use href="#heart"/></svg>
+  <svg class="h float" style="left:62%;top:21%;width:50px;--r:12deg"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:79%;top:26%;width:46px;opacity:.5"><use href="#heart"/></svg>
+  <svg class="h blur" style="left:75%;top:64%;width:62px"><use href="#heart"/></svg>
+  <svg class="h float d3" style="left:67%;top:36%;width:34px;--r:-10deg"><use href="#heart"/></svg>
+  <svg class="h big" style="left:-4%;bottom:-6%;width:260px"><use href="#heart"/></svg>
+  <svg class="h big" style="right:-3%;bottom:-8%;width:300px"><use href="#heart"/></svg>
+  <svg class="h blur" style="right:6%;top:12%;width:26px;opacity:1;filter:none;fill:var(--rose)"><use href="#heart"/></svg>
+
+  <!-- petals -->
+  <span class="petal" style="left:26%;top:80%;transform:rotate(30deg)"></span>
+  <span class="petal" style="left:81%;top:49%;transform:rotate(-40deg);opacity:.6"></span>
+  <span class="petal" style="left:73%;top:90%;transform:rotate(60deg)"></span>
+  <span class="petal" style="left:87%;top:38%;transform:rotate(10deg);opacity:.5;width:36px;height:24px"></span>
+  <span class="petal" style="left:24%;top:38%;transform:rotate(-20deg);opacity:.5"></span>
+
+  <!-- dashed trails -->
+  <svg class="trail" style="left:0;top:36%;width:340px;height:170px" viewBox="0 0 340 170">
+    <path d="M0 150 C60 100 110 95 175 80 C150 60 120 30 150 15 C175 0 205 25 180 70 C220 90 270 70 330 45"/>
+  </svg>
+  <svg class="trail plane" style="right:0;top:56%;width:300px;height:140px" viewBox="0 0 300 140">
+    <path d="M10 100 C40 60 40 20 80 20 C110 20 110 60 80 75 C60 85 40 90 70 100 C130 110 210 90 255 40"/>
+  </svg>
+  <svg class="plane" style="position:absolute;right:2.5%;top:56%;width:68px;transform:translateY(-50px) rotate(-6deg)" viewBox="0 0 64 56">
+    <path d="M62 2 2 24l20 8 8 20 8-14 14 8z" fill="#f2557c"/>
+    <path d="M62 2 22 32l8 20 8-14z" fill="#e23d68"/>
+  </svg>
+</div>
+
+<header>
+  <a class="logo" href="#" aria-label="SayByMe home">
+    <svg viewBox="0 0 48 48" fill="none" stroke="#e23d68" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M24 42C10 32 5 25 5 17.500A10.500 10.500 0 0 1 24 12a10.500 10.500 0 0 1 19 5.500C43 25 38 32 24 42z"/>
+      <path d="M13 17c1-4 4-5 7-4" stroke-width="2.600" opacity=".7"/>
+    </svg>
+    SayByMe
+  </a>
+  <p class="tagline">Small<br>Apologies…<br>Big Relationships…
+    <svg class="h"><use href="#heart"/></svg>
+  </p>
+</header>
+
+<main>
+  <!-- Envelope illustration -->
+  <div class="envelope-wrap" role="img" aria-label="Pink envelope with an I’m Sorry note and flowers">
+    <svg class="env" viewBox="0 0 640 330">
+      <defs>
+        <linearGradient id="eBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffc5d3"/><stop offset="1" stop-color="#f89db5"/>
+        </linearGradient>
+        <linearGradient id="eFlap" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffd3de"/><stop offset="1" stop-color="#ffb2c5"/>
+        </linearGradient>
+        <linearGradient id="eBack" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f7a8bd"/><stop offset="1" stop-color="#f48aa6"/>
+        </linearGradient>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="150%">
+          <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#e0587c" flood-opacity=".28"/>
+        </filter>
+        <symbol id="flower" viewBox="-20 -20 40 40">
+          <g fill="#fff6f7" stroke="#f6b9c8" stroke-width=".8">
+            <circle cx="0" cy="-9" r="7"/><circle cx="8.500" cy="-3" r="7"/><circle cx="5.500" cy="7" r="7"/>
+            <circle cx="-5.500" cy="7" r="7"/><circle cx="-8.500" cy="-3" r="7"/>
+          </g>
+          <circle r="4" fill="#f5b86a"/>
+        </symbol>
+      </defs>
+
+      <!-- sparkle lines -->
+      <g stroke="#e23d68" stroke-width="3" stroke-linecap="round">
+        <line x1="148" y1="104" x2="154" y2="116"/><line x1="82" y1="215" x2="96" y2="220"/>
+        <line x1="508" y1="115" x2="512" y2="102"/><line x1="528" y1="108" x2="540" y2="98"/>
+      </g>
+
+      <!-- envelope -->
+      <g filter="url(#soft)">
+        <path d="M130 105 L215 40 Q235 30 255 40 L270 48 L400 48 L420 40 Q440 32 460 50 L505 105 L500 260 L135 260 Z" fill="url(#eBack)"/>
+      </g>
+
+      <!-- letter -->
+      <g transform="rotate(-4 330 140)">
+        <rect x="205" y="38" width="248" height="170" rx="10" fill="#fff8f5" stroke="#f9dcd9" stroke-width="2"/>
+        <rect x="215" y="48" width="228" height="150" rx="6" fill="none" stroke="#f7e6e2" stroke-width="1.500"/>
+        <text x="298" y="95" font-family="Caveat,cursive" font-size="32" font-weight="700" fill="#4a2038" transform="rotate(-8 298 95)">I’m</text>
+        <text x="282" y="140" font-family="Caveat,cursive" font-size="40" font-weight="700" fill="#4a2038" transform="rotate(-8 282 140)">Sorry</text>
+        <use href="#heart" x="305" y="150" width="26" height="26" fill="#f2557c"/>
+      </g>
+
+      <!-- front panels -->
+      <path d="M135 120 L360 250 L135 262 Z" fill="url(#eBody)"/>
+      <path d="M505 118 L300 250 L505 262 Z" fill="url(#eBody)" opacity=".95"/>
+      <path d="M135 120 L322 245 L505 118 L505 268 Q505 275 495 275 L145 275 Q135 275 135 268 Z" fill="url(#eFlap)"/>
+      <path d="M135 120 L322 245 L505 118" fill="none" stroke="#ff9db6" stroke-width="2" opacity=".7"/>
+
+      <!-- seal heart -->
+      <use href="#heart" x="285" y="212" width="70" height="70" fill="#ee4468" style="filter:drop-shadow(0 4px 5px rgba(180,30,70,.35))"/>
+
+      <!-- flowers left -->
+      <g stroke="#7d8f4f" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M120 262 C105 220 100 180 98 140"/><path d="M135 262 C140 215 150 175 168 150"/>
+        <path d="M112 262 C85 230 70 200 62 180"/>
+      </g>
+      <g fill="#8fa05a">
+        <ellipse cx="108" cy="225" rx="12" ry="5" transform="rotate(-50 108 225)"/>
+        <ellipse cx="148" cy="212" rx="12" ry="5" transform="rotate(40 148 212)"/>
+      </g>
+      <use href="#flower" x="76" y="108" width="44" height="44"/>
+      <use href="#flower" x="142" y="124" width="40" height="40"/>
+      <use href="#flower" x="48" y="158" width="38" height="38"/>
+      <use href="#flower" x="110" y="168" width="46" height="46"/>
+
+      <!-- flowers right -->
+      <g stroke="#7d8f4f" stroke-width="3" fill="none" stroke-linecap="round">
+        <path d="M515 262 C520 220 515 180 510 150"/><path d="M525 262 C545 230 570 210 585 180"/>
+        <path d="M505 262 C490 230 480 205 482 175"/>
+      </g>
+      <g fill="#8fa05a">
+        <ellipse cx="525" cy="222" rx="12" ry="5" transform="rotate(-40 525 222)"/>
+        <ellipse cx="495" cy="215" rx="12" ry="5" transform="rotate(50 495 215)"/>
+      </g>
+      <use href="#flower" x="490" y="112" width="40" height="40"/>
+      <use href="#flower" x="540" y="140" width="38" height="38"/>
+      <use href="#flower" x="466" y="150" width="34" height="34"/>
+      <use href="#flower" x="506" y="170" width="42" height="42"/>
+
+      <!-- scattered petals -->
+      <g fill="#ffb3c6">
+        <path d="M40 278 q18 -16 36 -4 q-10 18 -36 4z"/>
+        <path d="M112 285 q14 -12 28 -2 q-8 14 -28 2z"/>
+        <path d="M545 275 q16 -12 30 -2 q-8 14 -30 2z"/>
+        <path d="M585 268 q12 -8 22 -2 q-6 10 -22 2z"/>
+      </g>
+
+      <!-- floating hearts around envelope -->
+      <use href="#heart" x="150" y="14" width="64" height="64" fill="#f2557c" style="filter:drop-shadow(0 6px 8px rgba(214,60,100,.3))"/>
+      <use href="#heart" x="250" y="-18" width="26" height="26" fill="#f2557c"/>
+      <use href="#heart" x="480" y="0" width="70" height="70" fill="#f2557c" style="filter:drop-shadow(0 6px 8px rgba(214,60,100,.3))"/>
+      <use href="#heart" x="548" y="118" width="28" height="28" fill="#f2557c"/>
+    </svg>
+  </div>
+
+  <h1>Let’s Make Things<br><span class="accent">Right!</span>
+    <svg class="outline-heart" viewBox="0 0 24 24"><use href="#heart"/></svg>
+  </h1>
+
+  <p class="lead">Tell us your name, and let’s start creating a beautiful apology for someone special.</p>
+
+  <form id="nameForm" novalidate>
+    <div class="field" id="field">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.400 3.600-7 8-7s8 2.600 8 7"/></svg>
+      <input id="name" name="name" type="text" placeholder="What’s your name?" autocomplete="given-name" aria-label="Your name" maxlength="40">
+    </div>
+    <p class="msg" id="msg" role="alert"></p>
+    <button class="btn" type="submit">
+      Continue
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

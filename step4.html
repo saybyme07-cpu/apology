@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – Choose Patch-up Animation ♡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@600;700&family=Kaushan+Script&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="step4.css">
+</head>
+<body>
+
+<!-- Reusable Vector Symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.5C5.5 17 2.5 13.2 2.5 9.2A5 5 0 0 1 12 6.6a5 5 0 0 1 9.5 2.6c0 4-3 7.8-9.5 12.3z"/></symbol>
+</svg>
+
+<!-- Ambient Background -->
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <svg class="h float" style="left:-2%;bottom:-4%;width:170px"><use href="#heart"/></svg>
+  <svg class="h float d2" style="left:46%;top:12%;width:65px;opacity:.35"><use href="#heart"/></svg>
+  <svg class="h float d3" style="right:2%;bottom:-2%;width:200px;opacity:.6"><use href="#heart"/></svg>
+  <svg class="h float" style="right:8%;top:18%;width:55px;opacity:.4"><use href="#heart"/></svg>
+  <span class="petal p1"></span>
+  <span class="petal p2"></span>
+</div>
+
+<!-- Header -->
+<header>
+  <a class="logo" href="index.html" aria-label="SayByMe home">
+    <svg viewBox="0 0 48 48" fill="none" stroke="#e23d68" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M24 42C10 32 5 25 5 17.5A10.5 10.5 0 0 1 24 12a10.5 10.5 0 0 1 19 5.5C43 25 38 32 24 42z"/>
+    </svg>
+    SayByMe
+  </a>
+
+  <!-- Stepper (Steps 1, 2, 3 done, Step 4 active) -->
+  <ol class="stepper" aria-label="Progress">
+    <li class="step done">
+      <span class="dot"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      <span class="num">1</span>
+      <span class="lbl">Details</span>
+    </li>
+    <li class="step done">
+      <span class="dot"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      <span class="num">2</span>
+      <span class="lbl">What Happened</span>
+    </li>
+    <li class="step done">
+      <span class="dot"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      <span class="num">3</span>
+      <span class="lbl">Message</span>
+    </li>
+    <li class="step active" aria-current="step">
+      <span class="dot">4</span>
+      <span class="num">4</span>
+      <span class="lbl">Style & Animations</span>
+    </li>
+    <li class="step">
+      <span class="dot">5</span>
+      <span class="num">5</span>
+      <span class="lbl">Preview</span>
+    </li>
+  </ol>
+
+  <!-- Tagline -->
+  <p class="tagline">
+    Small<br>Apologies…<br>Big Relationships…
+    <svg viewBox="0 0 24 24"><use href="#heart"/></svg>
+  </p>
+</header>
+
+<main>
+  <!-- Left Side: Selection Form Card (Restored) -->
+  <section class="card" aria-labelledby="title">
+    <div class="kicker">
+      <span class="step-pill">Step 4 of 5</span>
+      <span class="kicker-line"></span>
+    </div>
+
+    <h1 id="title">Choose <span class="accent">Patch-up</span> Animation ♡</h1>
+    <p class="lead">Pick a heartwarming reconciliation GIF & patch-up animation for your recipient to experience.</p>
+
+    <form id="styleForm">
+      
+      <!-- Animation Options Grid -->
+      <div class="options-group">
+        <p class="sub-label">Select Reconciliation Theme</p>
+        
+        <div class="anim-cards-grid">
+          <!-- Option 1: Kittens Puzzle Heart -->
+          <label class="anim-card selected" data-anim="kittens">
+            <input type="radio" name="patchup_theme" value="kittens" checked>
+            <div class="card-thumb-wrap">
+              <img src="assets/patchup_kittens.jpg" alt="Mending Hearts Kittens" class="thumb-img">
+              <span class="badge-tag">Most Popular ✨</span>
+            </div>
+            <div class="card-info">
+              <h3 class="anim-title">Mending Hearts</h3>
+              <p class="anim-desc">Two adorable kittens piecing together a glowing broken heart puzzle with fairy sparkles.</p>
+            </div>
+          </label>
+
+          <!-- Option 2: Anime Garden Promise -->
+          <label class="anim-card" data-anim="garden">
+            <input type="radio" name="patchup_theme" value="garden">
+            <div class="card-thumb-wrap">
+              <img src="assets/patchup_couple.jpg" alt="Heartfelt Garden Peace Offering" class="thumb-img">
+              <span class="badge-tag romance">Romantic 🌸</span>
+            </div>
+            <div class="card-info">
+              <h3 class="anim-title">Garden Peace Offering</h3>
+              <p class="anim-desc">Sweet couple in floral bloom with dancing butterflies and a glowing heart presentation.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Extra Reconciliation Stickers -->
+      <div class="sticker-section">
+        <p class="sub-label">Add a Sincere Seal of Forgiveness</p>
+        <div class="sticker-chips" id="stickerChips">
+          <button type="button" class="sticker-btn active" data-sticker="100% Sincere">
+            <span>💖 100% Sincere</span>
+          </button>
+          <button type="button" class="sticker-btn" data-sticker="Please Forgive Me">
+            <span>🥺 Please Forgive Me</span>
+          </button>
+          <button type="button" class="sticker-btn" data-sticker="Officially Patched Up">
+            <span>🩹 Officially Patched Up</span>
+          </button>
+          <button type="button" class="sticker-btn" data-sticker="Unlimited Hugs">
+            <span>🫂 Unlimited Hugs</span>
+          </button>
+          <button type="button" class="sticker-btn" data-sticker="Pinky Promise">
+            <span>🤙 Pinky Promise</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div class="actions">
+        <a class="btn back" href="step3.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>
+          <span>Back</span>
+        </a>
+        <button class="btn next" type="submit">
+          <span>Continue to Preview</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Right Side: Rabbit Illustration -->
+  <div class="art rabbit-art" role="img" aria-label="Cute rabbit hugging a pink heart pillow that says patching upppy">
+    <svg viewBox="0 0 600 760">
+      <defs>
+        <radialGradient id="rf" cx=".4" cy=".3" r=".9">
+          <stop offset="0" stop-color="#fffdfb"/><stop offset="1" stop-color="#f4e6df"/>
+        </radialGradient>
+        <linearGradient id="rh" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff7fa0"/><stop offset="1" stop-color="#ee4a78"/>
+        </linearGradient>
+        <linearGradient id="rear" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f9b5c6"/><stop offset="1" stop-color="#f48aa6"/>
+        </linearGradient>
+        <filter id="rs" x="-20%" y="-20%" width="140%" height="150%">
+          <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#c24468" flood-opacity=".25"/>
+        </filter>
+        <symbol id="rheart" viewBox="0 0 24 24">
+          <path d="M12 21.5C5.5 17 2.5 13.2 2.5 9.2A5 5 0 0 1 12 6.6a5 5 0 0 1 9.5 2.6c0 4-3 7.8-9.5 12.3z"/>
+        </symbol>
+      </defs>
+
+      <!-- Doodle hearts + sparks -->
+      <use href="#rheart" x="40" y="150" width="96" height="96" style="fill:none;stroke:#e23d68;stroke-width:1.3"/>
+      <use href="#rheart" x="505" y="250" width="72" height="72" style="fill:none;stroke:#e23d68;stroke-width:1.6"/>
+      <path d="M30 262l16 8M150 215l6 -14M500 232l12 -8" stroke="#e23d68" stroke-width="2.5" stroke-linecap="round"/>
+      <use href="#rheart" x="440" y="70" width="44" height="44" fill="#f78aa6"/>
+      <use href="#rheart" x="120" y="60" width="34" height="34" fill="#f9a1b8"/>
+
+      <!-- Floor shadow -->
+      <ellipse cx="300" cy="725" rx="270" ry="28" fill="#e88aa4" opacity=".35"/>
+
+      <g class="rabbit" filter="url(#rs)">
+
+        <!-- Body -->
+        <ellipse cx="300" cy="570" rx="185" ry="160" fill="url(#rf)"/>
+
+        <!-- Ears with twitch animation -->
+        <g class="ear-l">
+          <ellipse cx="195" cy="120" rx="58" ry="150" fill="url(#rf)" transform="rotate(-10 195 120)"/>
+          <ellipse cx="197" cy="130" rx="32" ry="118" fill="url(#rear)" transform="rotate(-10 197 130)"/>
+        </g>
+        <g>
+          <ellipse cx="430" cy="140" rx="58" ry="150" fill="url(#rf)" transform="rotate(26 430 140)"/>
+          <ellipse cx="428" cy="148" rx="32" ry="118" fill="url(#rear)" transform="rotate(26 428 148)"/>
+        </g>
+
+        <!-- Head -->
+        <ellipse cx="300" cy="330" rx="205" ry="175" fill="url(#rf)"/>
+
+        <!-- Forehead tuft -->
+        <path d="M270 168q30 -26 62 0q-30 12 -62 0z" fill="#f1e0d6"/>
+
+        <!-- Cheeks -->
+        <ellipse cx="140" cy="380" rx="42" ry="28" fill="#f7a3b4" opacity=".75"/>
+        <ellipse cx="460" cy="380" rx="42" ry="28" fill="#f7a3b4" opacity=".75"/>
+
+        <!-- Eyes -->
+        <ellipse cx="205" cy="325" rx="44" ry="50" fill="#3b2218"/>
+        <circle cx="205" cy="328" r="24" fill="#1d0f0b"/>
+        <circle cx="219" cy="308" r="13" fill="#fff"/><circle cx="192" cy="346" r="5.5" fill="#fff" opacity=".85"/>
+        <ellipse cx="395" cy="325" rx="44" ry="50" fill="#3b2218"/>
+        <circle cx="395" cy="328" r="24" fill="#1d0f0b"/>
+        <circle cx="409" cy="308" r="13" fill="#fff"/><circle cx="382" cy="346" r="5.5" fill="#fff" opacity=".85"/>
+        <path d="M160 285q40 -28 90 -2M350 283q50 -26 90 2" stroke="#6b4636" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+
+        <!-- Nose, mouth, teeth -->
+        <path d="M284 372q16 -12 32 0 -4 14 -16 17 -12 -3 -16 -17z" fill="#f08fa6"/>
+        <path d="M300 389v14M272 410q14 14 28 -7 14 21 28 7" stroke="#b9707f" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M286 412h28v26q0 6 -6 6h-16q-6 0 -6 -6z" fill="#fff" stroke="#ecd6cf" stroke-width="2"/>
+        <path d="M300 414v30" stroke="#ecd6cf" stroke-width="2"/>
+
+        <!-- Whiskers -->
+        <g stroke="#e3cfc6" stroke-width="2" stroke-linecap="round">
+          <path d="M235 395l-70 -10M235 410l-72 10M365 395l70 -10M365 410l72 10"/>
+        </g>
+
+        <!-- Bow at neck -->
+        <path d="M300 485l-95 -42q-28 36 8 80z" fill="#f78aa6"/>
+        <path d="M300 485l95 -42q28 36 -8 80z" fill="#f78aa6"/>
+        <circle cx="300" cy="487" r="18" fill="#ee6c92"/>
+
+        <!-- Heart pillow that says patching upppy -->
+        <g transform="rotate(-4 300 600)">
+          <path d="M300 740C165 645 118 585 118 528A100 100 0 0 1 300 490 100 100 0 0 1 482 528c0 57 -47 117 -182 212z"
+                fill="url(#rh)" stroke="#fff" stroke-width="3" stroke-dasharray="4 7" stroke-opacity=".6"/>
+          <g font-family="Caveat,'Segoe Script','Comic Sans MS',cursive" font-weight="700" text-anchor="middle" fill="#fff" stroke="#c92d5c" stroke-width="5" paint-order="stroke" stroke-linejoin="round" transform="rotate(-6 300 600)">
+            <text x="300" y="585" font-size="68">patching</text>
+            <text x="300" y="648" font-size="62">upppy</text>
+          </g>
+          <use href="#rheart" x="284" y="664" width="32" height="32" style="fill:none;stroke:#fff;stroke-width:1.6;opacity:.9"/>
+        </g>
+
+        <!-- Paws holding the pillow -->
+        <ellipse cx="155" cy="520" rx="52" ry="42" fill="url(#rf)" transform="rotate(-20 155 520)"/>
+        <ellipse cx="450" cy="520" rx="52" ry="42" fill="url(#rf)" transform="rotate(20 450 520)"/>
+        <g fill="#f4c5d0">
+          <circle cx="140" cy="512" r="5"/><circle cx="158" cy="506" r="5"/><circle cx="174" cy="512" r="5"/>
+          <circle cx="430" cy="512" r="5"/><circle cx="446" cy="506" r="5"/><circle cx="464" cy="512" r="5"/>
+        </g>
+
+        <!-- Feet with heart pads -->
+        <ellipse cx="150" cy="690" rx="88" ry="52" fill="url(#rf)" transform="rotate(-6 150 690)"/>
+        <ellipse cx="455" cy="692" rx="88" ry="52" fill="url(#rf)" transform="rotate(6 455 692)"/>
+        <use href="#rheart" x="124" y="668" width="48" height="48" fill="#f0698d"/>
+        <use href="#rheart" x="432" y="670" width="48" height="48" fill="#f0698d"/>
+        <g fill="#f0698d">
+          <circle cx="86" cy="672" r="8"/><circle cx="108" cy="655" r="8"/>
+          <circle cx="500" cy="656" r="8"/><circle cx="522" cy="672" r="8"/>
+        </g>
+      </g>
+
+      <!-- Floor hearts and petals -->
+      <use href="#rheart" x="525" y="610" width="68" height="68" fill="#f2557c" style="filter:drop-shadow(0 6px 8px rgba(214,60,100,.3))"/>
+      <use href="#rheart" x="555" y="690" width="52" height="52" fill="#f68aa6"/>
+      <use href="#rheart" x="10" y="640" width="60" height="60" fill="#f2557c"/>
+      <g fill="#ffa9c0">
+        <path d="M60 735q20 -16 40 -4 -10 18 -40 4z"/>
+        <path d="M270 745q18 -14 36 -2 -10 16 -36 2z"/>
+        <path d="M520 740q16 -12 32 -2 -8 14 -32 2z"/>
+      </g>
+    </svg>
+  </div>
+</main>
+
+<script src="convex-client.js"></script>
+<script src="step4.js"></script>
+</body>
+</html>

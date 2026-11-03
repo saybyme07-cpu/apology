@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SayByMe – Patch the heart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson: #d81b4f;
+    --crimson-dark: #b8123f;
+    --crimson-gradient: linear-gradient(135deg, #f0446f 0%, #d81b4f 50%, #b8123f 100%);
+    --wine: #851c3f;
+    --rose: #f0446f;
+    --ink: #2f1526;
+    --paper-bg: #fffdfa;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at 50% 20%, #fff6f8 0, transparent 65%),
+      linear-gradient(180deg, #fdeaf0 0%, #f9d5e4 55%, #f6c8de 100%);
+  }
+
+  /* ---------- Page Wrapper (Compact & Clean on Mobile) ---------- */
+  .stage-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    text-align: center;
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  /* Optional Gentle Top Tag */
+  .top-tag {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--wine);
+    margin-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .top-tag svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--rose);
+  }
+
+  /* ---------- The Heart Interactive Button ---------- */
+  .heart-btn {
+    position: relative;
+    width: min(84vw, 300px);
+    border: 0;
+    background: none;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 40px;
+    margin: 4px auto 10px;
+    transition: transform 0.2s ease;
+  }
+
+  .heart-btn:focus-visible {
+    outline: 3px solid var(--rose);
+    outline-offset: 6px;
+  }
+
+  .heart-btn.healed {
+    cursor: default;
+  }
+
+  svg.art {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  /* Halves: outer group = pose, inner group = idle tremble */
+  .half {
+    transition: transform 1s cubic-bezier(.34, 1.45, .55, 1);
+  }
+
+  .L {
+    transform-origin: 505px 1100px;
+    transform: translate(-48px, 10px) rotate(-5deg);
+  }
+
+  .R {
+    transform-origin: 505px 1100px;
+    transform: translate(48px, -6px) rotate(5deg);
+  }
+
+  .joined .L, .joined .R {
+    transform: none;
+  }
+
+  .shadow {
+    transform-origin: 505px 1110px;
+    transition: transform 1s;
+    transform: scale(1.12, 1);
+  }
+
+  .joined .shadow {
+    transform: scale(1);
+  }
+
+  /* Crack line (only visible when joined) */
+  .crack {
+    opacity: 0;
+    transition: opacity .6s .5s;
+  }
+
+  .joined .crack {
+    opacity: 1;
+  }
+
+  /* Stitches */
+  .st-line {
+    stroke: #fff;
+    stroke-width: 22;
+    stroke-linecap: round;
+    stroke-dasharray: 125;
+    stroke-dashoffset: 125;
+    transition: stroke-dashoffset .45s ease-out;
+  }
+
+  .st-hole {
+    opacity: 0;
+    transition: opacity .25s;
+  }
+
+  .sew .st-hole, .sew .st-line {
+    transition-delay: calc(var(--i) * .42s);
+  }
+
+  .sew .st-line {
+    stroke-dashoffset: 0;
+  }
+
+  .sew .st-hole {
+    opacity: 1;
+  }
+
+  /* Bandages */
+  .bd {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    transform: scale(0) rotate(-40deg);
+    opacity: 0;
+    transition: transform .55s cubic-bezier(.3, 1.7, .5, 1), opacity .2s;
+    transition-delay: calc(var(--i) * .35s);
+  }
+
+  .patch .bd {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+
+  /* Mini hearts + sparks */
+  .mini {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    opacity: 0;
+    transform: translateY(60px) scale(.2);
+    transition: transform .8s cubic-bezier(.3, 1.6, .5, 1), opacity .4s;
+    transition-delay: calc(var(--i) * .2s);
+  }
+
+  .done .mini {
+    opacity: 1;
+    transform: none;
+  }
+
+  .spark {
+    stroke: #f2477a;
+    stroke-width: 22;
+    stroke-linecap: round;
+    stroke-dasharray: 70;
+    stroke-dashoffset: 70;
+    transition: stroke-dashoffset .4s ease-out;
+    transition-delay: calc(var(--i) * .07s);
+  }
+
+  .done .spark {
+    stroke-dashoffset: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .jit {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+    }
+
+    .L .jit {
+      animation: tremL 2.4s ease-in-out infinite;
+    }
+
+    .R .jit {
+      animation: tremR 2.4s ease-in-out infinite .3s;
+    }
+
+    @keyframes tremL {
+      0%, 100% { transform: translate(0, 0) rotate(0); }
+      25% { transform: translate(-3px, 1px) rotate(-.6deg); }
+      60% { transform: translate(2px, -1px) rotate(.4deg); }
+    }
+
+    @keyframes tremR {
+      0%, 100% { transform: translate(0, 0) rotate(0); }
+      30% { transform: translate(3px, -1px) rotate(.6deg); }
+      65% { transform: translate(-2px, 1px) rotate(-.4deg); }
+    }
+
+    .joined .jit {
+      animation: none;
+    }
+
+    .heart-btn:not(.healed):hover svg.art {
+      animation: wiggle .5s;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0); }
+      30% { transform: rotate(-1.5deg); }
+      70% { transform: rotate(1.5deg); }
+    }
+
+    .beat {
+      transform-origin: 505px 900px;
+    }
+
+    .done .beat {
+      animation: beat 1.8s ease-in-out infinite 1s;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      12% { transform: scale(1.045); }
+      24% { transform: scale(1); }
+      36% { transform: scale(1.03); }
+      48% { transform: scale(1); }
+    }
+
+    .done .mini {
+      animation: floaty 3s ease-in-out infinite 1.4s;
+    }
+
+    @keyframes floaty {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -10px; }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .half, .st-line, .st-hole, .bd, .mini, .spark {
+      transition-duration: .01s;
+      transition-delay: 0s !important;
+    }
+  }
+
+  /* Flying particles burst */
+  .pt {
+    position: absolute;
+    pointer-events: none;
+    width: 22px;
+    height: 22px;
+    left: 50%;
+    top: 60%;
+    fill: #f4527a;
+    z-index: 5;
+  }
+
+  /* ---------- Text + Hints ---------- */
+  .hint {
+    font: 600 clamp(20px, 5.5vw, 24px) 'Fredoka', sans-serif;
+    text-align: center;
+    min-height: 1.3em;
+    letter-spacing: -0.3px;
+    color: var(--ink);
+  }
+
+  .hint em {
+    font-style: normal;
+    color: var(--crimson);
+  }
+
+  .sub {
+    font-size: 13.5px;
+    color: #85647a;
+    text-align: center;
+    min-height: 1.5em;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* Pulse Tap Indicator */
+  .tap-badge {
+    margin-top: 10px;
+    padding: 7px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #f7b2c5;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--crimson);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(216, 27, 79, 0.12);
+    animation: pulseBadge 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseBadge {
+    0%, 100% { transform: scale(1); opacity: 0.95; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  .healed-hide {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .is-healed .healed-hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9);
+  }
+
+  /* ---------- CELEBRATION POPUP MODAL ---------- */
+  .celebrate-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(43, 18, 36, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .celebrate-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .celebrate-card {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    background: linear-gradient(165deg, #ffffff 0%, #fff7fa 55%, #ffeef3 100%);
+    border: 2px solid #ffd1dc;
+    box-shadow: 0 24px 60px rgba(216, 27, 79, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.85);
+    border-radius: 26px;
+    padding: 26px 20px 22px;
+    text-align: center;
+    transform: scale(0.8) translateY(30px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .celebrate-modal.active .celebrate-card {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(240, 68, 111, 0.12);
+    color: var(--crimson);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .modal-close-btn:hover {
+    background: rgba(240, 68, 111, 0.25);
+  }
+
+  .badge-icon-wrap {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    background: linear-gradient(135deg, #ffeef3, #ffccd9);
+    border: 1.5px solid #ffa3ba;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 6px 18px rgba(216, 27, 79, 0.2);
+    animation: badgePulse 2.2s infinite ease-in-out;
+  }
+
+  @keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .popup-title {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.15;
+    color: var(--wine);
+    margin-bottom: 4px;
+  }
+
+  .popup-sub {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 15px;
+    color: var(--crimson);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .popup-text {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #5b2342;
+    margin-bottom: 14px;
+    padding: 0 4px;
+  }
+
+  .popup-sign {
+    border-top: 1px dashed #f6cbd7;
+    padding-top: 10px;
+    margin-top: 10px;
+    font-size: 12px;
+    font-style: italic;
+    color: #8c586e;
+    text-align: center;
+  }
+
+  .popup-sign .sender-name {
+    display: block;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 24px;
+    font-style: normal;
+    color: var(--crimson);
+    margin-top: 1px;
+  }
+
+  .btn-celebrate-action {
+    margin-top: 14px;
+    width: 100%;
+    height: 42px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--crimson-gradient);
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 16px rgba(216, 27, 79, 0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-celebrate-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(216, 27, 79, 0.4);
+  }
+
+  .btn-celebrate-action:active {
+    transform: scale(0.98);
+  }
+
+  /* Confetti Ribbons & Hearts */
+  .confetti-piece {
+    position: fixed;
+    z-index: 1001;
+    pointer-events: none;
+  }
+
+    /* Choice Buttons Section Below Heart Animation */
+  .choice-actions-wrap {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 340px;
+    position: relative;
+    min-height: 52px;
+    z-index: 10;
+  }
+
+  .btn-choice {
+    font-family: 'Poppins', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+
+  .btn-accept {
+    border: none;
+    background: var(--crimson-gradient);
+    color: #ffffff;
+    box-shadow: 0 5px 18px rgba(216, 27, 79, 0.38);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+    animation: acceptPulse 2s infinite ease-in-out;
+  }
+
+  @keyframes acceptPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 5px 18px rgba(216, 27, 79, 0.38); }
+    50% { transform: scale(1.04); box-shadow: 0 8px 26px rgba(216, 27, 79, 0.55); }
+  }
+
+  .btn-accept:hover {
+    transform: scale(1.08) !important;
+    box-shadow: 0 10px 28px rgba(216, 27, 79, 0.6);
+  }
+
+  .btn-accept:active {
+    transform: scale(0.96) !important;
+  }
+
+  .btn-need-time {
+    border: 1.5px solid rgba(133, 28, 63, 0.25);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #7b2a4c;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    transition: left 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2), top 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2), transform 0.15s ease;
+  }
+
+  .btn-need-time.is-dodging {
+    position: fixed !important;
+    z-index: 99999 !important;
+    box-shadow: 0 12px 32px rgba(184, 18, 63, 0.28) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    border-color: #f0446f !important;
+    color: #d81b4f !important;
+    pointer-events: auto !important;
+  }
+
+  /* Audio Button Matching Letter Pages */
+  .audio-btn {
+    position: fixed;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(240, 68, 111, 0.2);
+    box-shadow: 0 4px 14px rgba(216, 27, 79, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.2s ease;
+  }
+
+  .audio-btn:hover {
+    transform: scale(1.08);
+    background: #ffffff;
+  }
+</style>
+</head>
+<body>
+
+<!-- Audio Player -->
+<audio id="bgmAudio" src="assets/bgm.m4a" loop preload="auto"></audio>
+
+<main class="stage-wrap" id="stageWrap">
+  
+  <div class="top-tag">
+    SayByMe
+    <svg viewBox="0 0 24 24"><use href="#h"/></svg>
+  </div>
+
+  <!-- The Heart Button Interactive Stage -->
+  <button class="heart-btn" id="heartBtn" type="button" aria-label="Broken heart. Tap to patch it up.">
+    <svg class="art" id="art" viewBox="60 300 904 880" aria-hidden="true">
+      <defs>
+        <symbol id="h" viewBox="0 0 24 24"><path d="M12 21.5C5.5 17 2.5 13.2 2.5 9.2A5 5 0 0 1 12 6.6a5 5 0 0 1 9.5 2.6c0 4-3 7.8-9.5 12.3z"/></symbol>
+
+        <linearGradient id="hg" x1="0" y1="0" x2=".25" y2="1">
+          <stop offset="0" stop-color="#ff6f9f"/><stop offset=".55" stop-color="#f23d6f"/><stop offset="1" stop-color="#d5204f"/>
+        </linearGradient>
+        <radialGradient id="bg" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#ffb3cc" stop-opacity=".5"/><stop offset="1" stop-color="#ffb3cc" stop-opacity="0"/></radialGradient>
+        <filter id="blur"><feGaussianBlur stdDeviation="14"/></filter>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#a3123c" flood-opacity=".25"/></filter>
+
+        <!-- zig-zag crack -->
+        <clipPath id="clipL"><polygon points="0,0 508,0 508,572 486,628 524,692 488,765 530,840 494,918 512,990 497,1055 506,1100 0,1100"/></clipPath>
+        <clipPath id="clipR"><polygon points="508,0 1100,0 1100,1100 506,1100 497,1055 512,990 494,918 530,840 488,765 524,692 486,628 508,572"/></clipPath>
+
+        <path id="heartShape" d="M508 572C470 520 400 495 330 505C220 520 152 610 152 710C152 860 330 990 505 1100C690 990 862 860 862 710C862 610 790 520 685 503C610 495 545 525 508 572Z"/>
+      </defs>
+
+      <!-- soft glow + floor shadow -->
+      <circle cx="510" cy="800" r="420" fill="url(#bg)"/>
+      <ellipse class="shadow" cx="505" cy="1112" rx="290" ry="34" fill="#ec6f9a" opacity=".5" filter="url(#blur)"/>
+
+      <!-- sparks -->
+      <g>
+        <line class="spark" style="--i:0" x1="172" y1="478" x2="198" y2="520"/>
+        <line class="spark" style="--i:1" x1="108" y1="520" x2="160" y2="548"/>
+        <line class="spark" style="--i:2" x1="105" y1="598" x2="140" y2="598"/>
+        <line class="spark" style="--i:0" x1="845" y1="478" x2="822" y2="520"/>
+        <line class="spark" style="--i:1" x1="915" y1="520" x2="862" y2="548"/>
+        <line class="spark" style="--i:2" x1="918" y1="598" x2="884" y2="598"/>
+      </g>
+
+      <!-- floating mini hearts -->
+      <use class="mini" style="--i:1" href="#h" x="468" y="414" width="92" height="92" fill="#f45d86"/>
+      <use class="mini" style="--i:2" href="#h" x="570" y="326" width="100" height="100" fill="#f7739a"/>
+
+      <g class="beat">
+        <!-- LEFT half -->
+        <g class="half L">
+          <g class="jit">
+            <g clip-path="url(#clipL)" filter="url(#soft)">
+              <use href="#heartShape" fill="url(#hg)" stroke="#ff9dbd" stroke-opacity=".55" stroke-width="7"/>
+              <ellipse cx="312" cy="572" rx="64" ry="26" transform="rotate(-27 312 572)" fill="#fff" opacity=".55"/>
+              <ellipse cx="262" cy="640" rx="20" ry="8" transform="rotate(-50 262 640)" fill="#fff" opacity=".35"/>
+              <path d="M232 815Q330 900 430 960" stroke="#ff8fb2" stroke-opacity=".35" stroke-width="22" fill="none" stroke-linecap="round"/>
+              <polyline points="508,572 486,628 524,692 488,765 530,840 494,918 512,990 497,1055 506,1100" fill="none" stroke="#c4194a" stroke-width="12" stroke-linejoin="miter"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- RIGHT half -->
+        <g class="half R">
+          <g class="jit">
+            <g clip-path="url(#clipR)" filter="url(#soft)">
+              <use href="#heartShape" fill="url(#hg)" stroke="#ff9dbd" stroke-opacity=".55" stroke-width="7"/>
+              <ellipse cx="688" cy="568" rx="66" ry="26" transform="rotate(14 688 568)" fill="#fff" opacity=".5"/>
+              <ellipse cx="562" cy="610" rx="18" ry="8" transform="rotate(-40 562 610)" fill="#fff" opacity=".3"/>
+              <polyline points="508,572 486,628 524,692 488,765 530,840 494,918 512,990 497,1055 506,1100" fill="none" stroke="#c4194a" stroke-width="12" stroke-linejoin="miter"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- crack line once joined -->
+        <g class="crack">
+          <polyline points="508,572 486,628 524,692 488,765 530,840 494,918 512,990 497,1055 506,1100" fill="none" stroke="#fff" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" opacity=".95"/>
+          <polyline points="508,572 486,628 524,692 488,765 530,840 494,918 512,990 497,1055 506,1100" fill="none" stroke="#ff9dbd" stroke-width="2" transform="translate(5 0)" opacity=".8"/>
+        </g>
+
+        <!-- stitches -->
+        <g id="stitches">
+          <g style="--i:0">
+            <ellipse class="st-hole" cx="466" cy="727" rx="23" ry="17" fill="#9d1239" stroke="#e8667f" stroke-width="3" transform="rotate(-14 466 727)"/>
+            <ellipse class="st-hole" cx="570" cy="700" rx="23" ry="17" fill="#9d1239" stroke="#e8667f" stroke-width="3" transform="rotate(-14 570 700)"/>
+            <line class="st-line" x1="466" y1="728" x2="570" y2="700"/>
+          </g>
+          <g style="--i:1">
+            <ellipse class="st-hole" cx="448" cy="830" rx="23" ry="17" fill="#9d1239" stroke="#e8667f" stroke-width="3" transform="rotate(-14 448 830)"/>
+            <ellipse class="st-hole" cx="545" cy="806" rx="23" ry="17" fill="#9d1239" stroke="#e8667f" stroke-width="3" transform="rotate(-14 545 806)"/>
+            <line class="st-line" x1="448" y1="831" x2="545" y2="806"/>
+          </g>
+          <g style="--i:2">
+            <ellipse class="st-hole" cx="486" cy="925" rx="23" ry="17" fill="#9d1239" stroke="#e8667f" stroke-width="3" transform="rotate(-14 486 925)"/>
+            <ellipse class="st-hole" cx="570" cy="900" rx="23" ry="17" fill="#9d1239" stroke="#e8667f" stroke-width="3" transform="rotate(-14 570 900)"/>
+            <line class="st-line" x1="486" y1="926" x2="570" y2="900"/>
+          </g>
+        </g>
+
+        <!-- bandages -->
+        <g transform="translate(342 700) rotate(-28)">
+          <g class="bd" style="--i:0">
+            <rect x="-106" y="-33" width="212" height="66" rx="33" fill="#f7c995" stroke="#e9b27d" stroke-width="3"/>
+            <rect x="-40" y="-33" width="80" height="66" fill="#fbe1bf"/>
+            <rect x="-96" y="-27" width="192" height="10" rx="5" fill="#fff" opacity=".3"/>
+            <use href="#h" x="-27" y="-27" width="54" height="54" fill="#f4527a"/>
+            <g fill="#ee9a5c"><circle cx="-82" cy="-12" r="5.500"/><circle cx="-62" cy="10" r="5.500"/><circle cx="-88" cy="14" r="5"/><circle cx="82" cy="-14" r="5.500"/><circle cx="64" cy="10" r="5.500"/><circle cx="88" cy="12" r="5"/></g>
+          </g>
+        </g>
+        <g transform="translate(670 822) rotate(30)">
+          <g class="bd" style="--i:1">
+            <rect x="-106" y="-33" width="212" height="66" rx="33" fill="#f7c995" stroke="#e9b27d" stroke-width="3"/>
+            <rect x="-40" y="-33" width="80" height="66" fill="#fbe1bf"/>
+            <rect x="-96" y="-27" width="192" height="10" rx="5" fill="#fff" opacity=".3"/>
+            <use href="#h" x="-27" y="-27" width="54" height="54" fill="#f4527a"/>
+            <g fill="#ee9a5c"><circle cx="-82" cy="-12" r="5.500"/><circle cx="-62" cy="10" r="5.500"/><circle cx="-88" cy="14" r="5"/><circle cx="82" cy="-14" r="5.500"/><circle cx="64" cy="10" r="5.500"/><circle cx="88" cy="12" r="5"/></g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </button>
+
+  <p class="hint" id="hint" aria-live="polite">My heart is <em>broken</em>…</p>
+  <p class="sub" id="sub">Will you forgive me and make it whole?</p>
+
+  <!-- Choice Decision Buttons Below Heart Animation -->
+  <div class="choice-actions-wrap healed-hide" id="choiceWrap">
+    <button type="button" class="btn-choice btn-accept" id="btnAccept" aria-label="Accept apology and heal heart">
+      <span class="btn-heart-icon">❤️</span>
+      <span class="btn-label">Apology accepted</span>
+    </button>
+    <button type="button" class="btn-choice btn-need-time" id="btnNeedTime" tabindex="-1" aria-label="I need time">
+      <span class="btn-label" id="needTimeLabel">I need time 🥺</span>
+    </button>
+  </div>
+
+</main>
+
+<!-- Floating Audio Toggle Button Matching Preview & Letter Pages -->
+<button type="button" class="audio-btn" id="audioBtn" aria-label="Toggle background music">
+  <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <path id="soundWaves" d="M15.5 8.5a5 5 0 0 1 0 7M19 5.5a9 9 0 0 1 0 13"></path>
+    <g id="muteLines" style="display:none;">
+      <line x1="23" y1="9" x2="17" y2="15"></line>
+      <line x1="17" y1="9" x2="23" y2="15"></line>
+    </g>
+  </svg>
+</button>
+
+<!-- =========================================================================
+     CELEBRATION POPUP DIALOG (Appears automatically once patched up)
+     ========================================================================= -->
+<div class="celebrate-modal" id="celebrateModal" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+  <div class="celebrate-card">
+    <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">×</button>
+    
+    <div class="badge-icon-wrap">💖</div>
+    
+    <h2 class="popup-title" id="popupTitle">All Patched Up! ♡</h2>
+    <p class="popup-sub">Thank you for forgiving me</p>
+    
+    <p class="popup-text" id="popupMsg">
+      You just made my heart whole again. Thank you for your kindness, patience, and love. I promise to cherish you always.
+    </p>
+
+    <div class="popup-sign">
+      Forever with sincere love,
+      <strong class="sender-name" id="popupSender">Me</strong>
+    </div>
+
+    <button type="button" class="btn-celebrate-action" id="btnWeAreGood">
+      <span>We're Good Now! 💕</span>
+    </button>
+  </div>
+</div>
+
+<script src="convex-client.js"></script>
+<script>
+  /* ----- Data Integration from URL / Session / Convex ----- */
+  const q = new URLSearchParams(location.search);
+  const slug = q.get('slug') || sessionStorage.getItem('saybyme_apology_slug') || sessionStorage.getItem('saybyme_proposal_slug');
+  const sessionSender = sessionStorage.getItem('saybyme_sender_name') || 'Me';
+  const sessionMsg = sessionStorage.getItem('saybyme_apology_message');
+
+  const popupSender = document.getElementById('popupSender');
+  const popupMsg = document.getElementById('popupMsg');
+
+  if (q.get('from')) popupSender.textContent = q.get('from');
+  else if (sessionSender) popupSender.textContent = sessionSender;
+
+  if (sessionMsg) {
+    // Custom note if sender provided one
+    popupMsg.textContent = "You just made my heart whole again. Thank you for forgiving me and holding my heart with care.";
+  }
+
+  if (slug && typeof getApologyFromConvex === 'function') {
+    getApologyFromConvex(slug).then(data => {
+      if (data && data.senderName && popupSender) {
+        popupSender.textContent = data.senderName;
+      }
+    }).catch(() => {});
+  }
+
+  const btn  = document.getElementById('heartBtn');
+  const art  = document.getElementById('art');
+  const hint = document.getElementById('hint');
+  const sub  = document.getElementById('sub');
+  const choiceWrap = document.getElementById('choiceWrap');
+  const btnAccept = document.getElementById('btnAccept');
+  const btnNeedTime = document.getElementById('btnNeedTime');
+  const needTimeLabel = document.getElementById('needTimeLabel');
+  const stageWrap = document.getElementById('stageWrap');
+  const celebrateModal = document.getElementById('celebrateModal');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const btnWeAreGood = document.getElementById('btnWeAreGood');
+
+  const audioBtn = document.getElementById('audioBtn');
+  const bgm = document.getElementById('bgmAudio');
+  const soundWaves = document.getElementById('soundWaves');
+  const muteLines = document.getElementById('muteLines');
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timers = [], busy = false, healed = false;
+  let soundOn = true, ctx;
+
+  const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+  // --- AUDIO LOGIC (Background Music Plays Entirely, Toggleable via Audio Button) ---
+  let isUserMuted = sessionStorage.getItem('saybyme_audio_muted') === 'true';
+  let isAudioPlaying = false;
+
+  function updateAudioButtonUI(playing) {
+    if (playing) {
+      if (soundWaves) soundWaves.style.display = '';
+      if (muteLines) muteLines.style.display = 'none';
+      if (audioBtn) audioBtn.setAttribute('aria-label', 'Mute background music');
+    } else {
+      if (soundWaves) soundWaves.style.display = 'none';
+      if (muteLines) muteLines.style.display = '';
+      if (audioBtn) audioBtn.setAttribute('aria-label', 'Play background music');
+    }
+  }
+
+  function startBgm() {
+    if (isUserMuted || !bgm) return;
+    bgm.play().then(() => {
+      isAudioPlaying = true;
+      updateAudioButtonUI(true);
+    }).catch(() => {
+      isAudioPlaying = false;
+      updateAudioButtonUI(false);
+    });
+  }
+
+  // Attempt automatic start
+  startBgm();
+
+  // Modern browser policy fallback: play on first user gesture anywhere
+  const triggerAudioOnFirstGesture = () => {
+    if (!isUserMuted && bgm && bgm.paused) {
+      startBgm();
+    }
+  };
+  window.addEventListener('click', triggerAudioOnFirstGesture, { capture: true, once: true });
+  window.addEventListener('touchstart', triggerAudioOnFirstGesture, { capture: true, once: true });
+  window.addEventListener('pointerdown', triggerAudioOnFirstGesture, { capture: true, once: true });
+
+  // Floating audio mute toggle button
+  if (audioBtn && bgm) {
+    audioBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!bgm.paused) {
+        bgm.pause();
+        isAudioPlaying = false;
+        isUserMuted = true;
+        soundOn = false;
+        sessionStorage.setItem('saybyme_audio_muted', 'true');
+        updateAudioButtonUI(false);
+      } else {
+        isUserMuted = false;
+        soundOn = true;
+        sessionStorage.setItem('saybyme_audio_muted', 'false');
+        bgm.play().then(() => {
+          isAudioPlaying = true;
+          updateAudioButtonUI(true);
+        }).catch(() => {});
+      }
+    });
+  }
+
+  /* ----- Melodic Tone Chimes ----- */
+  function playChime(freqs = [523.25, 659.25, 783.99, 1046.5], speed = 0.11) {
+    if (!soundOn) return;
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      freqs.forEach((f, i) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * speed;
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.18, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.85);
+        o.connect(g).connect(ctx.destination);
+        o.start(t); o.stop(t + 0.95);
+      });
+    } catch (e) {}
+  }
+
+  function playDodgeChirp() {
+    if (!soundOn) return;
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(500, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(840, ctx.currentTime + 0.1);
+      g.gain.setValueAtTime(0.07, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.11);
+    } catch (err) {}
+  }
+
+  /* ----- Heart Particles Burst from Center ----- */
+  function burst() {
+    if (reduce) return;
+    for (let i = 0; i < 22; i++) {
+      const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      s.setAttribute('viewBox', '0 0 24 24');
+      s.setAttribute('class', 'pt');
+      s.innerHTML = '<use href="#h"/>';
+      btn.appendChild(s);
+      const a = (Math.PI * 2 * i) / 22 + Math.random() * .4;
+      const d = 130 + Math.random() * 160;
+      const k = s.animate([
+        { transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(a) * d}px), calc(-50% + ${Math.sin(a) * d - 30}px)) scale(${.8 + Math.random()})`, opacity: 0 }
+      ], { duration: 1100 + Math.random() * 600, easing: 'cubic-bezier(.2,.7,.3,1)' });
+      k.onfinish = () => s.remove();
+    }
+  }
+
+  /* ----- Full-Screen Confetti & Ribbon Explosion ----- */
+  function launchCelebrationConfetti() {
+    if (reduce) return;
+    const colors = ['#f0446f', '#ff7399', '#ffb3c6', '#ffccd9', '#ffffff', '#ffd166', '#d81b4f'];
+    
+    // 55 celebratory confetti pieces
+    for (let i = 0; i < 55; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      const isHeart = Math.random() > 0.45;
+      const size = 10 + Math.random() * 14;
+      
+      if (isHeart) {
+        el.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${colors[Math.floor(Math.random() * colors.length)]}"><use href="#h"/></svg>`;
+      } else {
+        el.style.width = (6 + Math.random() * 8) + 'px';
+        el.style.height = (12 + Math.random() * 12) + 'px';
+        el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = '3px';
+      }
+
+      el.style.left = (Math.random() * 100) + 'vw';
+      el.style.top = '-20px';
+      el.style.opacity = '1';
+      document.body.appendChild(el);
+
+      const fallDuration = 2200 + Math.random() * 1800;
+      const driftX = (Math.random() - 0.5) * 160;
+      const rotateDeg = Math.random() * 720 - 360;
+
+      const anim = el.animate([
+        { transform: 'translate3d(0, 0, 0) rotate(0deg)', opacity: 1 },
+        { transform: `translate3d(${driftX}px, calc(105vh), 0) rotate(${rotateDeg}deg)`, opacity: 0 }
+      ], {
+        duration: fallDuration,
+        delay: Math.random() * 600,
+        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      });
+
+      anim.onfinish = () => el.remove();
+    }
+  }
+
+  /* ----- RUNAWAY BUTTON LOGIC ("I need time" dodges away from mouse) ----- */
+  const playfulPhrases = [
+    "I need time 🥺",
+    "Are you sure? 🙈",
+    "Please rethink! 🥺",
+    "Can't click me! 😜",
+    "Still running! 🏃‍♂️💨",
+    "Try the other button! ❤️",
+    "I really miss you! 🥺",
+    "Give me another chance! 💖",
+    "Only love here! 🥰",
+    "Caught you smiling! 😊"
+  ];
+  let phraseIdx = 0;
+
+  function dodge(e) {
+    if (healed || busy || !btnNeedTime) return;
+
+    btnNeedTime.classList.add('is-dodging');
+    
+    const rect = btnNeedTime.getBoundingClientRect();
+    const btnW = rect.width || 120;
+    const btnH = rect.height || 42;
+    const pad = 24;
+
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+
+    const maxX = Math.max(pad, winW - btnW - pad);
+    const maxY = Math.max(pad, winH - btnH - pad);
+
+    let ptrX = winW / 2;
+    let ptrY = winH / 2;
+    if (e) {
+      if (e.clientX !== undefined) {
+        ptrX = e.clientX;
+        ptrY = e.clientY;
+      } else if (e.touches && e.touches[0]) {
+        ptrX = e.touches[0].clientX;
+        ptrY = e.touches[0].clientY;
+      }
+    }
+
+    let newX = pad;
+    let newY = pad;
+    let attempts = 0;
+    let dist = 0;
+
+    do {
+      newX = pad + Math.random() * (maxX - pad);
+      newY = pad + Math.random() * (maxY - pad);
+      dist = Math.hypot((newX + btnW / 2) - ptrX, (newY + btnH / 2) - ptrY);
+      attempts++;
+    } while (dist < 150 && attempts < 25);
+
+    btnNeedTime.style.left = `${Math.round(newX)}px`;
+    btnNeedTime.style.top = `${Math.round(newY)}px`;
+
+    btnNeedTime.style.transform = 'scale(0.92)';
+    setTimeout(() => {
+      if (btnNeedTime) btnNeedTime.style.transform = 'scale(1)';
+    }, 140);
+
+    phraseIdx = (phraseIdx + 1) % playfulPhrases.length;
+    if (needTimeLabel) needTimeLabel.textContent = playfulPhrases[phraseIdx];
+
+    playDodgeChirp();
+  }
+
+  // Proximity dodge: if cursor comes within 70px of the button, dodge!
+  document.addEventListener('pointermove', (e) => {
+    if (healed || busy || !btnNeedTime) return;
+    const rect = btnNeedTime.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+    if (dist < 75) {
+      dodge(e);
+    }
+  });
+
+  // Direct events on btnNeedTime
+  if (btnNeedTime) {
+    btnNeedTime.addEventListener('mouseenter', dodge);
+    btnNeedTime.addEventListener('mouseover', dodge);
+    btnNeedTime.addEventListener('pointerenter', dodge);
+    btnNeedTime.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dodge(e);
+    });
+    btnNeedTime.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dodge(e.touches ? e.touches[0] : e);
+    }, { passive: false });
+    btnNeedTime.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dodge(e);
+      return false;
+    });
+    btnNeedTime.addEventListener('focus', () => {
+      btnNeedTime.blur();
+      dodge();
+    });
+  }
+
+  /* ----- The Core Patching & Healing Sequence ----- */
+  function heal() {
+    if (busy || healed) return;
+    busy = true;
+    
+    // Tactile click feedback
+    btn.style.transform = 'scale(0.96)';
+    setTimeout(() => { btn.style.transform = ''; }, 160);
+
+    stageWrap.classList.add('is-healed');
+    if (btnNeedTime) btnNeedTime.style.display = 'none';
+    if (sub) sub.textContent = 'Patching our heart with love…';
+    playChime([523.25, 659.25], 0.14);
+
+    // 1. Halves slide together
+    art.classList.add('joined');
+
+    // 2. Stitches sewn one by one
+    later(() => {
+      art.classList.add('sew');
+      playChime([659.25, 783.99, 880], 0.35);
+    }, 950);
+
+    // 3. Bandages stick on with cute bounce
+    later(() => {
+      art.classList.add('patch');
+      playChime([880, 987.77], 0.2);
+    }, 2400);
+
+    // 4. Celebration burst & heart rhythm
+    later(() => {
+      art.classList.add('done');
+      burst();
+      hint.innerHTML = 'All patched up! <em>♡</em>';
+      if (sub) sub.textContent = 'Small apologies, big relationships.';
+      btn.classList.add('healed');
+      btn.setAttribute('aria-label', 'Heart patched up');
+      art.classList.add('beat-on');
+      healed = true;
+      busy = false;
+      btn.disabled = true;
+
+      // Mark forgiven in Convex
+      if (slug && typeof markApologyForgivenInConvex === 'function') {
+        markApologyForgivenInConvex(slug);
+      }
+
+      // 5. Trigger celebrations & popup
+      playChime([523.25, 659.25, 783.99, 1046.5, 1318.5], 0.1);
+      launchCelebrationConfetti();
+
+      // Show Celebration Popup smoothly after 700ms
+      setTimeout(() => {
+        celebrateModal.classList.add('active');
+        launchCelebrationConfetti();
+      }, 700);
+
+    }, 3300);
+  }
+
+  // Apology accepted button triggers the patch animation and celebration!
+  if (btnAccept) {
+    btnAccept.addEventListener('click', () => {
+      if (busy || healed) return;
+      heal();
+    });
+  }
+
+  // Clicking heart also triggers accept
+  btn.addEventListener('click', () => {
+    if (busy || healed) return;
+    heal();
+  });
+
+  // Close celebration modal
+  modalCloseBtn.addEventListener('click', () => {
+    celebrateModal.classList.remove('active');
+  });
+
+  celebrateModal.addEventListener('click', (e) => {
+    if (e.target === celebrateModal) {
+      celebrateModal.classList.remove('active');
+    }
+  });
+
+  // Action button inside celebration modal
+  btnWeAreGood.addEventListener('click', () => {
+    btnWeAreGood.innerHTML = '<span>Big Hug Sent! 🥰</span>';
+    btnWeAreGood.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+    burst();
+    launchCelebrationConfetti();
+    playChime([659.25, 880, 1046.5], 0.08);
+    setTimeout(() => {
+      celebrateModal.classList.remove('active');
+    }, 1200);
+  });
+</script>
+</body>
+</html>

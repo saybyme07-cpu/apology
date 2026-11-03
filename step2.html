@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SayByMe – What happened? 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@600;700&family=Kaushan+Script&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="step2.css?v=11">
+</head>
+<body>
+
+<!-- Reusable Vector Symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21.5C5.5 17 2.5 13.2 2.5 9.2A5 5 0 0 1 12 6.6a5 5 0 0 1 9.5 2.6c0 4-3 7.8-9.5 12.3z"/></symbol>
+  <symbol id="rose" viewBox="-20 -20 40 40">
+    <circle r="19" fill="#f1799a"/><circle r="14" fill="#f58aa8"/><circle r="9" fill="#ee6c92"/>
+    <path d="M-6 -2a6 6 0 0 1 12 0M-3 3a4 4 0 0 0 7 -1" stroke="#c9396a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+<!-- Ambient Background Decorations -->
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <svg class="h float" style="left:-2%;top:38%;width:150px"><use href="#heart"/></svg>
+  <svg class="h float d2" style="left:44%;top:16%;width:80px;opacity:.35"><use href="#heart"/></svg>
+  <svg class="h float d3" style="right:-2%;top:40%;width:110px;opacity:.45"><use href="#heart"/></svg>
+  <svg class="h big" style="right:-4%;bottom:-6%;width:270px"><use href="#heart"/></svg>
+  <svg class="h big" style="left:5%;bottom:-8%;width:250px"><use href="#heart"/></svg>
+  <svg class="h float d2" style="left:62%;bottom:-2%;width:70px;opacity:.4"><use href="#heart"/></svg>
+  <span class="petal p1"></span>
+  <span class="petal p2"></span>
+  <span class="petal p3"></span>
+</div>
+
+<!-- Header with Logo, Stepper, and Tagline -->
+<header>
+  <a class="logo" href="index.html" aria-label="SayByMe home">
+    <svg viewBox="0 0 48 48" fill="none" stroke="#e23d68" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M24 42C10 32 5 25 5 17.5A10.5 10.5 0 0 1 24 12a10.5 10.5 0 0 1 19 5.5C43 25 38 32 24 42z"/>
+    </svg>
+    SayByMe
+  </a>
+
+  <!-- Elevated Stepper Progress -->
+  <ol class="stepper" aria-label="Progress">
+    <li class="step done">
+      <span class="dot">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.500"/></svg>
+      </span>
+      <span class="num">1</span>
+      <span class="lbl">Details</span>
+    </li>
+    <li class="step active" aria-current="step">
+      <span class="dot">2</span>
+      <span class="num">2</span>
+      <span class="lbl">What Happened</span>
+    </li>
+    <li class="step">
+      <span class="dot">3</span>
+      <span class="num">3</span>
+      <span class="lbl">Message</span>
+    </li>
+    <li class="step">
+      <span class="dot">4</span>
+      <span class="num">4</span>
+      <span class="lbl">Style</span>
+    </li>
+    <li class="step">
+      <span class="dot">5</span>
+      <span class="num">5</span>
+      <span class="lbl">Preview</span>
+    </li>
+  </ol>
+
+  <!-- Tagline -->
+  <p class="tagline">
+    Small<br>Apologies…<br>Big Relationships…
+    <svg viewBox="0 0 24 24"><use href="#heart"/></svg>
+  </p>
+</header>
+
+<main>
+  <!-- Left Side: Interactive Teddy Bear Artwork -->
+  <div class="art" aria-hidden="true">
+    <svg viewBox="0 0 560 700">
+      <defs>
+        <radialGradient id="fur" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fbe3c8"/><stop offset="1" stop-color="#efc197"/></radialGradient>
+        <linearGradient id="hrt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff86a4"/><stop offset="1" stop-color="#ee4f7b"/></linearGradient>
+        <filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#c24468" flood-opacity=".25"/></filter>
+      </defs>
+
+      <!-- Doodle Floating Hearts -->
+      <g fill="none" stroke="#e23d68" stroke-width="2.6" stroke-linecap="round">
+        <use href="#heart" x="75" y="40" width="80" height="80" style="fill:none;stroke:#e23d68;stroke-width:1.4"/>
+        <use href="#heart" x="462" y="165" width="56" height="56" style="fill:none;stroke:#e23d68;stroke-width:1.6"/>
+        <path d="M70 130l-14 -10M60 148l-18 2M168 70l1 14"/>
+      </g>
+
+      <!-- Floor Shadow -->
+      <ellipse cx="290" cy="640" rx="260" ry="26" fill="#e88aa4" opacity=".35"/>
+
+      <!-- Animated Bear Character -->
+      <g class="bear" filter="url(#sh)">
+        <!-- Gift Box Behind -->
+        <rect x="430" y="470" width="110" height="150" rx="10" fill="#fbd0da"/>
+        <rect x="470" y="470" width="26" height="150" fill="#f6a9bd"/>
+        <!-- Body -->
+        <ellipse cx="300" cy="500" rx="150" ry="140" fill="url(#fur)"/>
+        <!-- Legs -->
+        <ellipse cx="205" cy="595" rx="82" ry="62" fill="url(#fur)" transform="rotate(-12 205 595)"/>
+        <ellipse cx="410" cy="595" rx="82" ry="62" fill="url(#fur)" transform="rotate(12 410 595)"/>
+        <ellipse cx="205" cy="610" rx="46" ry="38" fill="#f9b3c4" transform="rotate(-12 205 610)"/>
+        <ellipse cx="410" cy="610" rx="46" ry="38" fill="#f9b3c4" transform="rotate(12 410 610)"/>
+        <use href="#heart" x="183" y="598" width="42" height="42" fill="#f0698d"/>
+        <use href="#heart" x="389" y="598" width="42" height="42" fill="#f0698d"/>
+        <g fill="#f0698d"><circle cx="165" cy="585" r="9"/><circle cx="195" cy="570" r="9"/><circle cx="430" cy="570" r="9"/><circle cx="455" cy="585" r="9"/></g>
+
+        <!-- Ears -->
+        <circle cx="150" cy="180" r="62" fill="url(#fur)" transform="translate(40 0)"/>
+        <circle cx="210" cy="170" r="32" fill="#f4a1b4" transform="translate(-10 0)"/>
+        <circle cx="440" cy="130" r="62" fill="url(#fur)"/>
+        <circle cx="440" cy="135" r="32" fill="#f4a1b4"/>
+        <!-- Head -->
+        <ellipse cx="310" cy="270" rx="185" ry="165" fill="url(#fur)"/>
+        <!-- Cheeks -->
+        <ellipse cx="195" cy="320" rx="34" ry="22" fill="#f7a3b4" opacity=".7"/>
+        <ellipse cx="420" cy="320" rx="34" ry="22" fill="#f7a3b4" opacity=".7"/>
+        <!-- Muzzle -->
+        <ellipse cx="310" cy="335" rx="78" ry="58" fill="#fff0e0"/>
+        <path d="M290 322c0-12 40-12 40 0 0 12-20 20-20 20s-20-8-20-20z" fill="#7a4a3a"/>
+        <path d="M310 342v14M294 358c8 10 28 10 36 0" stroke="#7a4a3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- Eyes with soft twinkle -->
+        <g>
+          <circle cx="240" cy="262" r="25" fill="#2b1612"/><circle cx="249" cy="252" r="9" fill="#fff"/><circle cx="231" cy="274" r="4" fill="#fff" opacity=".8"/>
+          <circle cx="400" cy="250" r="25" fill="#2b1612"/><circle cx="409" cy="240" r="9" fill="#fff"/><circle cx="391" cy="262" r="4" fill="#fff" opacity=".8"/>
+        </g>
+
+        <!-- Ribbon -->
+        <path d="M410 380l80 -40q25 10 10 40l-60 30z" fill="#f78aa6"/>
+        <path d="M230 455l-60 10 20 50 50 -20z" fill="#f78aa6"/>
+
+        <!-- Heart Pillow with Stitched Trim -->
+        <g transform="rotate(-8 330 480)">
+          <path d="M330 640C190 540 150 480 150 420A100 100 0 0 1 330 380 100 100 0 0 1 510 420c0 60 -40 120 -180 220z" fill="url(#hrt)" stroke="#fff" stroke-width="3" stroke-dasharray="4 7" stroke-opacity=".6"/>
+          <text x="238" y="470" font-family="Caveat,cursive" font-size="64" font-weight="700" fill="#fff" fill-opacity=".95" transform="rotate(-8 238 470)">Sorry...</text>
+          <use href="#heart" x="280" y="500" width="48" height="48" style="fill:none;stroke:#fff;stroke-width:1.6;opacity:.9"/>
+        </g>
+
+        <!-- Arms Hugging Pillow -->
+        <ellipse cx="190" cy="500" rx="62" ry="78" fill="url(#fur)" transform="rotate(25 190 500)"/>
+        <ellipse cx="450" cy="500" rx="58" ry="72" fill="url(#fur)" transform="rotate(-20 450 500)"/>
+      </g>
+
+      <!-- Roses & Note -->
+      <g>
+        <use href="#rose" x="-10" y="470" width="90" height="90"/>
+        <use href="#rose" x="20" y="560" width="80" height="80"/>
+        <use href="#rose" x="-20" y="400" width="70" height="70"/>
+        <use href="#rose" x="70" y="390" width="56" height="56" opacity=".8"/>
+      </g>
+      <!-- Reduced & refined letter note -->
+      <g transform="translate(25 45) scale(0.82) rotate(-6 120 570)">
+        <rect x="68" y="478" width="188" height="238" rx="8" fill="#fff4f2" stroke="#f3d6d2" stroke-width="2"/>
+        <text font-family="Caveat,cursive" font-size="26" font-weight="500" fill="#7a3f55" text-anchor="middle">
+          <tspan x="162" y="540">I</tspan><tspan x="162" y="572">just want</tspan><tspan x="162" y="602">to make</tspan><tspan x="162" y="632">things right...</tspan>
+        </text>
+        <use href="#heart" x="148" y="648" width="30" height="30" style="fill:none;stroke:#e23d68;stroke-width:1.5"/>
+      </g>
+      <use href="#heart" x="78" y="680" width="70" height="70" fill="#f2557c" style="transform:translateY(-70px)"/>
+
+      <!-- Fallen Petals -->
+      <g fill="#ffa9c0">
+        <path d="M20 660q20 -16 40 -4 -10 18 -40 4z"/><path d="M270 690q18 -14 36 -2 -10 16 -36 2z"/>
+        <path d="M360 660q16 -12 32 -2 -8 14 -32 2z"/><path d="M500 640q14 -10 28 -2 -8 12 -28 2z"/>
+        <path d="M130 700q14 -10 28 0 -8 12 -28 0z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Right Side: Elevated Form Glassmorphism Card -->
+  <section class="card" aria-labelledby="title">
+    <!-- Step Badge -->
+    <div class="kicker">
+      <span class="step-pill">Step 2 of 5</span>
+      <span class="kicker-line"></span>
+    </div>
+
+    <!-- Title -->
+    <h1 id="title">What <span class="accent">happened?</span>
+      <svg viewBox="0 0 24 24"><use href="#heart"/></svg>
+    </h1>
+
+    <!-- Personalized Subtitle -->
+    <p class="lead" id="leadText">
+      Take a moment to tell us what happened. This helps us create a more personal and meaningful apology.
+    </p>
+
+    <!-- Main Input Form -->
+    <form id="form" novalidate>
+      <div class="box" id="box">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20l1-4L16.500 4.500a2.100 2.100 0 0 1 3 3L8 19z"/>
+          <path d="M14.500 6.500l3 3"/>
+        </svg>
+        <label for="story" class="sr-only" style="position:absolute;left:-9999px">What happened</label>
+        <textarea id="story" maxlength="300" placeholder="Explain what happened…"></textarea>
+        
+        <div class="count-wrapper">
+          <span class="count" id="count" aria-live="polite">0/300</span>
+        </div>
+      </div>
+      <p class="msg" id="msg" role="alert"></p>
+
+      <!-- Elevated Suggestion Chips -->
+      <div class="ideas-header">
+        <span class="sparkle-icon">✨</span>
+        <span class="ideas">Need ideas? Tap one or more examples to combine:</span>
+      </div>
+
+      <div class="chips" id="chips">
+        <button type="button" class="chip" data-phrase="I ignored their messages" aria-pressed="false">
+          <span class="chip-emoji">💬</span>
+          <span class="chip-text">I ignored their messages</span>
+          <span class="chip-check">✓</span>
+        </button>
+        <button type="button" class="chip" data-phrase="I said something hurtful" aria-pressed="false">
+          <span class="chip-emoji">💔</span>
+          <span class="chip-text">I said something hurtful</span>
+          <span class="chip-check">✓</span>
+        </button>
+        <button type="button" class="chip" data-phrase="I misunderstood them" aria-pressed="false">
+          <span class="chip-emoji">🥺</span>
+          <span class="chip-text">I misunderstood them</span>
+          <span class="chip-check">✓</span>
+        </button>
+        <button type="button" class="chip" data-phrase="I couldn’t give enough time" aria-pressed="false">
+          <span class="chip-emoji">⏳</span>
+          <span class="chip-text">I couldn’t give enough time</span>
+          <span class="chip-check">✓</span>
+        </button>
+        <button type="button" class="chip" data-phrase="I was rude by mistake" aria-pressed="false">
+          <span class="chip-emoji">🙈</span>
+          <span class="chip-text">I was rude by mistake</span>
+          <span class="chip-check">✓</span>
+        </button>
+        <button type="button" class="chip" data-other="1" aria-pressed="false">
+          <span class="chip-emoji">✍️</span>
+          <span class="chip-text">Write my own / Other</span>
+        </button>
+      </div>
+
+      <!-- Action Navigation Buttons -->
+      <div class="actions">
+        <a class="btn back" href="index.html" id="backBtn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4M10 6l-6 6 6 6"/></svg>
+          <span>Back</span>
+        </a>
+        <button class="btn next" type="submit" id="nextBtn">
+          <span>Continue</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<script src="step2.js?v=11"></script>
+</body>
+</html>

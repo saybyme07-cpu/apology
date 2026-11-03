@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will you forgive me? – SayByMe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wine: #851c3f;
+    --rose: #f0446f;
+    --crimson: #d81b4f;
+    --crimson-dark: #b8123f;
+    --crimson-gradient: linear-gradient(135deg, #f0446f 0%, #d81b4f 50%, #b8123f 100%);
+    --ink: #381a29;
+    --paper-bg: #fffdfa;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow-x: hidden;
+    background:
+      radial-gradient(ellipse at 50% 15%, #fff6f8 0, transparent 65%),
+      linear-gradient(180deg, #fdebf1 0%, #fbdde7 60%, #f9d2df 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Soft Ambient Background */
+  .bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .bg svg {
+    position: absolute;
+    fill: #f7a9c0;
+    filter: blur(5px);
+    opacity: 0.45;
+  }
+
+  .bg .c {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(247, 169, 192, 0.28);
+    filter: blur(16px);
+  }
+
+  /* Small & Simple Page Container - Fits Mobile Cleanly Without Giant Elements */
+  .page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    min-height: 100svh;
+    padding: max(14px, env(safe-area-inset-top)) 16px max(14px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* ---------- Heading Matching Caveat Script from Previous Pages ---------- */
+  h1 {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 29px;
+    line-height: 1.15;
+    color: var(--wine);
+    margin-bottom: 2px;
+  }
+
+  h1 svg {
+    width: 0.75em;
+    height: 0.75em;
+    vertical-align: -0.05em;
+    margin-left: 0.1em;
+    fill: none;
+    stroke: var(--rose);
+    stroke-width: 2;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 45%;
+    max-width: 130px;
+    margin: 4px 0 6px 0;
+  }
+
+  .divider i {
+    flex: 1;
+    height: 1.5px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, #f79db9);
+  }
+
+  .divider i:last-child {
+    background: linear-gradient(270deg, transparent, #f79db9);
+  }
+
+  .divider svg {
+    width: 15px;
+    height: 15px;
+    fill: var(--rose);
+  }
+
+  .msg {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #5b2342;
+    max-width: 290px;
+    margin: 0 auto;
+    min-height: 2.8em;
+  }
+
+  /* ---------- Small, Cute Mascot Card ---------- */
+  .card {
+    width: 100%;
+    max-width: 165px;
+    margin: 8px auto 10px;
+    border-radius: 20px;
+    aspect-ratio: 1 / 0.88;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.85), rgba(255, 230, 238, 0.65));
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 22px rgba(214, 70, 110, 0.12), inset 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+
+  .card svg.bunny {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bun { transform-origin: 200px 330px; }
+  .glad-g, .happy-only { opacity: 0; transition: opacity 0.4s; }
+  .sad-g { transition: opacity 0.3s; }
+  .happy .glad-g, .happy .happy-only { opacity: 1; }
+  .happy .sad-g { opacity: 0; }
+  .sparkl line { stroke: #f2477a; stroke-width: 9; stroke-linecap: round; }
+  .ear-l, .ear-r { transition: transform 0.5s; }
+  .happy .ear-l { transform: rotate(-14deg); }
+  .happy .ear-r { transform: rotate(14deg); }
+  .ear-l { transform-origin: 150px 120px; }
+  .ear-r { transform-origin: 250px 120px; }
+  .mend { transition: filter 0.6s; }
+  .happy .mend { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.95)); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bun { animation: breathe 4s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015, 1.025); } }
+    .happy .bun { animation: hop 0.7s ease-out 3; }
+    @keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-18px); } }
+    .tear { animation: tear 2.8s ease-in infinite; }
+    @keyframes tear { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(24px); opacity: 0; } }
+    .happy .joy { animation: joy 1.9s ease-in infinite; }
+    .happy .joy.j2 { animation-delay: -0.6s; }
+    .happy .joy.j3 { animation-delay: -1.1s; }
+    .happy .joy.j4 { animation-delay: -1.5s; }
+    @keyframes joy { 0% { transform: translateY(-4px) scale(0.6); opacity: 0; } 20% { opacity: 1; transform: translateY(0) scale(1); } 100% { transform: translateY(30px) scale(0.9); opacity: 0; } }
+    .happy .twk { animation: twk 1.4s ease-in-out infinite; }
+    .happy .twk.t2 { animation-delay: -0.7s; }
+    @keyframes twk { 0%, 100% { transform: scale(0.4) rotate(0); opacity: 0.3; } 50% { transform: scale(1) rotate(20deg); opacity: 1; } }
+    .fl { animation: fl 3.5s ease-in-out infinite; }
+    .fl.b { animation-delay: -1.7s; }
+    @keyframes fl { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+  }
+
+  .happy .tear { display: none; }
+  .joy { fill: #bfe6f5; stroke: #7fc8e6; stroke-width: 1.5; transform-box: fill-box; transform-origin: 50% 0; }
+  .twk { transform-box: fill-box; transform-origin: 50% 50%; }
+
+  /* ---------- Compact, Elegant Buttons matching previous pages ---------- */
+  .btn {
+    border: 0;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 999px;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
+  }
+
+  .yes {
+    margin-top: 6px;
+    width: 100%;
+    max-width: 240px;
+    height: 44px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--crimson-gradient);
+    box-shadow: 0 5px 18px rgba(216, 27, 79, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .yes:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 22px rgba(216, 27, 79, 0.4);
+  }
+
+  .yes:active { transform: scale(0.98); }
+  .yes:disabled { cursor: default; transform: none; }
+
+  .later-wrap {
+    margin-top: 8px;
+    width: 100%;
+    max-width: 200px;
+    height: 34px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .later {
+    width: 100%;
+    height: 100%;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #5b2342;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #f8a5bc;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .later:hover { background: #fff; }
+  .later.run {
+    position: fixed;
+    z-index: 6;
+    margin: 0;
+    box-shadow: 0 6px 18px rgba(214, 70, 110, 0.2);
+    transition: left 0.3s cubic-bezier(0.3, 1.5, 0.5, 1), top 0.3s cubic-bezier(0.3, 1.5, 0.5, 1), opacity 0.3s;
+  }
+
+  .later svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: var(--crimson);
+    stroke-width: 1.8;
+  }
+
+  .btn:focus-visible, .audio-btn:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: 2px;
+  }
+
+  .gone {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .note {
+    min-height: 1.3em;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--wine);
+    font-weight: 500;
+  }
+
+  /* ---------- Signature - Matches 'Caveat' Font from Letter Page ---------- */
+  .sign {
+    margin-top: 8px;
+    padding-top: 4px;
+    text-align: right;
+    align-self: flex-end;
+    font-style: italic;
+    font-size: 12px;
+    color: #8c586e;
+    width: 100%;
+    max-width: 290px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sign .name {
+    display: block;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 22px;
+    font-style: normal;
+    color: var(--crimson);
+    margin-top: 1px;
+    padding-right: 4px;
+  }
+
+  .sign .line {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: -2px;
+  }
+
+  .sign .line i {
+    width: 80px;
+    height: 1.5px;
+    border-radius: 2px;
+    background: #f2477a;
+    transform: rotate(-1.5deg);
+  }
+
+  .sign .line svg {
+    width: 10px;
+    height: 10px;
+    fill: var(--rose);
+  }
+
+  /* ---------- Floating Audio Button Matching Preview & Letter Pages ---------- */
+  .audio-btn {
+    position: fixed;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(240, 68, 111, 0.2);
+    box-shadow: 0 4px 14px rgba(216, 27, 79, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.2s ease;
+  }
+
+  .audio-btn:hover {
+    transform: scale(1.08);
+    background: #ffffff;
+  }
+
+  /* Confetti Pop Hearts */
+  .pop {
+    position: fixed;
+    z-index: 4;
+    pointer-events: none;
+    fill: #f4527a;
+    width: 20px;
+    height: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Audio Player -->
+<audio id="bgmAudio" src="assets/bgm.m4a" loop preload="auto"></audio>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="h" viewBox="0 0 24 24"><path d="M12 21.5C5.5 17 2.5 13.2 2.5 9.2A5 5 0 0 1 12 6.6a5 5 0 0 1 9.5 2.6c0 4-3 7.8-9.5 12.3z"/></symbol>
+  <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffdfd"/><stop offset="1" stop-color="#f9e7ec"/></linearGradient>
+  <linearGradient id="hp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7da0"/><stop offset="1" stop-color="#e53a68"/></linearGradient>
+</svg>
+
+<div class="bg" aria-hidden="true">
+  <svg style="left:8%;top:-20px;width:90px"><use href="#h"/></svg>
+  <svg style="right:-15px;top:25px;width:90px"><use href="#h"/></svg>
+  <svg style="left:-25px;top:180px;width:80px"><use href="#h"/></svg>
+  <svg style="left:6%;bottom:18%;width:60px"><use href="#h"/></svg>
+  <div class="c" style="left:-6%;bottom:-5%;width:55%;height:160px"></div>
+  <div class="c" style="left:25%;bottom:-8%;width:45%;height:160px"></div>
+</div>
+
+<main class="page" id="page">
+  <h1 id="title">Will you forgive me?
+    <svg viewBox="0 0 24 24"><use href="#h"/></svg>
+  </h1>
+  <div class="divider"><i></i><svg viewBox="0 0 24 24"><use href="#h"/></svg><i></i></div>
+  <p class="msg" id="msg">You mean the absolute world to me, and all I want is to make things right with you.</p>
+
+  <!-- Small & Adorable Bunny Card -->
+  <div class="card" id="card" role="img" aria-label="A sad little bunny holding a heart patched with a bandage">
+    <svg class="bunny" id="bunny" viewBox="0 0 400 360">
+      <!-- floor shadow -->
+      <ellipse cx="200" cy="322" rx="170" ry="26" fill="#fbc6d6"/>
+      <ellipse cx="200" cy="318" rx="130" ry="16" fill="#f9b5ca" opacity=".7"/>
+
+      <!-- floating doodles -->
+      <use class="fl" href="#h" x="295" y="40" width="52" height="52" fill="#f45d86"/>
+      <use class="fl b" href="#h" x="330" y="100" width="48" height="48" style="fill:none;stroke:#f45d86;stroke-width:1.5"/>
+      <g class="sparkl" id="sparkL"><line x1="64" y1="230" x2="92" y2="238"/><line x1="58" y1="260" x2="86" y2="262"/><line x1="98" y1="200" x2="112" y2="218"/></g>
+      <g class="sparkl"><line x1="318" y1="262" x2="344" y2="270"/><line x1="306" y1="290" x2="330" y2="298"/><line x1="296" y1="244" x2="310" y2="258"/></g>
+
+      <g class="bun">
+        <!-- body -->
+        <ellipse cx="200" cy="270" rx="95" ry="62" fill="url(#fur)"/>
+
+        <!-- ears -->
+        <g class="ear-l">
+          <path d="M138 140C95 130 50 110 45 80C42 55 90 45 150 80C168 92 168 135 138 140Z" fill="url(#fur)" stroke="#f3d3dc" stroke-width="2"/>
+          <path d="M132 124C100 118 68 102 64 84C70 74 100 76 140 98C150 106 146 122 132 124Z" fill="#fbc3d2"/>
+        </g>
+        <g class="ear-r">
+          <path d="M255 130C300 120 345 150 352 205C355 238 322 240 300 210C282 188 245 160 255 130Z" fill="url(#fur)" stroke="#f3d3dc" stroke-width="2"/>
+          <path d="M290 150C316 156 334 180 336 205C328 214 314 206 304 190C294 176 284 162 290 150Z" fill="#fbc3d2"/>
+        </g>
+
+        <!-- head -->
+        <ellipse cx="200" cy="170" rx="108" ry="92" fill="url(#fur)" stroke="#f6dbe3" stroke-width="2"/>
+
+        <!-- cheeks -->
+        <ellipse cx="128" cy="195" rx="24" ry="16" fill="#f9b3c6" opacity=".8"/>
+        <ellipse cx="272" cy="195" rx="24" ry="16" fill="#f9b3c6" opacity=".8"/>
+
+        <!-- SAD face -->
+        <g class="sad-g">
+          <ellipse cx="160" cy="170" rx="26" ry="29" fill="#5a1c24"/>
+          <ellipse cx="160" cy="176" rx="18" ry="19" fill="#b23a45" opacity=".75"/>
+          <circle cx="152" cy="160" r="10" fill="#fff"/><circle cx="170" cy="184" r="4.5" fill="#fff"/>
+          <ellipse cx="248" cy="174" rx="26" ry="29" fill="#5a1c24"/>
+          <ellipse cx="248" cy="180" rx="18" ry="19" fill="#b23a45" opacity=".75"/>
+          <circle cx="240" cy="164" r="10" fill="#fff"/><circle cx="258" cy="188" r="4.5" fill="#fff"/>
+          <path d="M134 138Q158 124 180 140" stroke="#7a3a48" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M228 142Q252 128 272 150" stroke="#7a3a48" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path class="tear" d="M142 192q6 10 0 16q-6 -6 0 -16z" fill="#bfe6f5"/>
+          <path class="tear" style="animation-delay:-1.4s" d="M270 198q6 10 0 16q-6 -6 0 -16z" fill="#bfe6f5"/>
+          <path d="M196 204q4 -4 9 0 -2 5 -4.500 6 -3 -1 -4.500 -6z" fill="#f08fa6"/>
+          <path d="M204 210v6M190 222q7 6 13 -4 6 10 14 4" stroke="#8a4352" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- HAPPY face -->
+        <g class="glad-g">
+          <path d="M134 176Q160 148 186 176" stroke="#5a1c24" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M222 176Q248 148 274 176" stroke="#5a1c24" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M139 184Q160 164 181 184M227 184Q248 164 269 184" stroke="#d3f0fb" stroke-width="6" fill="none" stroke-linecap="round" opacity=".95"/>
+          <path d="M136 188Q124 206 128 232M272 188Q284 206 280 232" stroke="#bfe6f5" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+          <path class="joy" d="M134 194q8 14 0 24q-8 -10 0 -24z"/>
+          <path class="joy j2" d="M274 194q8 14 0 24q-8 -10 0 -24z"/>
+          <path class="joy j3" d="M146 200q5 9 0 15q-5 -6 0 -15z"/>
+          <path class="joy j4" d="M262 200q5 9 0 15q-5 -6 0 -15z"/>
+          <g fill="#fff" opacity=".95"><path class="twk" d="M118 160l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/><path class="twk t2" d="M292 156l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/></g>
+          <path d="M196 204q4 -4 9 0 -2 5 -4.500 6 -3 -1 -4.500 -6z" fill="#f08fa6"/>
+          <path d="M178 214Q202 244 226 214Q202 224 178 214Z" fill="#b8344f" stroke="#8a4352" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M190 222q12 10 24 0" fill="#f6879f"/>
+        </g>
+
+        <!-- heart pillow with bandage -->
+        <g class="mend">
+          <path d="M200 330C120 275 98 238 98 212A52 52 0 0 1 200 196 52 52 0 0 1 302 212c0 26 -22 63 -102 118z"
+                fill="url(#hp)" stroke="#fff" stroke-opacity=".7" stroke-width="2.5" stroke-dasharray="3 6"/>
+          <ellipse cx="146" cy="214" rx="18" ry="8" transform="rotate(-30 146 214)" fill="#fff" opacity=".35"/>
+          <g transform="translate(200 250)">
+            <g transform="rotate(35)"><rect x="-48" y="-14" width="96" height="28" rx="14" fill="#f4c595" stroke="#e5ad78" stroke-width="2"/></g>
+            <g transform="rotate(-35)">
+              <rect x="-48" y="-14" width="96" height="28" rx="14" fill="#f7cda0" stroke="#e5ad78" stroke-width="2"/>
+              <circle cx="-28" cy="0" r="3" fill="#fff" opacity=".7"/><circle cx="0" cy="0" r="3" fill="#fff" opacity=".7"/><circle cx="28" cy="0" r="3" fill="#fff" opacity=".7"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- paws holding heart -->
+        <ellipse cx="116" cy="235" rx="22" ry="17" fill="url(#fur)" stroke="#f3d3dc" stroke-width="2"/>
+        <ellipse cx="284" cy="235" rx="22" ry="17" fill="url(#fur)" stroke="#f3d3dc" stroke-width="2"/>
+        <g fill="#f4c7d3"><path d="M104 220v8M116 218v10M128 220v8M272 220v8M284 218v10M296 220v8" stroke="#f0bccb" stroke-width="2" stroke-linecap="round"/></g>
+
+        <!-- feet -->
+        <ellipse cx="125" cy="300" rx="48" ry="34" fill="url(#fur)" stroke="#f3d3dc" stroke-width="2"/>
+        <ellipse cx="275" cy="300" rx="48" ry="34" fill="url(#fur)" stroke="#f3d3dc" stroke-width="2"/>
+        <use href="#h" x="107" y="294" width="36" height="36" fill="#f783a3"/>
+        <use href="#h" x="257" y="294" width="36" height="36" fill="#f783a3"/>
+        <g fill="#f783a3"><circle cx="100" cy="286" r="6"/><circle cx="116" cy="276" r="6"/><circle cx="284" cy="276" r="6"/><circle cx="300" cy="286" r="6"/></g>
+      </g>
+    </svg>
+  </div>
+
+  <button class="btn yes" id="yes" type="button">Yes, I forgive you! 💕</button>
+  <div class="later-wrap" id="laterWrap">
+    <button class="btn later" id="later" type="button">I need a little more time
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#h"/></svg>
+    </button>
+  </div>
+  <p class="note" id="note" aria-live="polite"></p>
+
+  <p class="sign">Forever with love,
+    <span class="name" id="from">Me</span>
+    <span class="line"><i></i><svg viewBox="0 0 24 24"><use href="#h"/></svg></span>
+  </p>
+</main>
+
+<!-- Floating Audio Toggle Button Matching Preview & Letter Pages -->
+<button type="button" class="audio-btn" id="audioBtn" aria-label="Toggle background music">
+  <svg id="audioIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <path id="soundWaves" d="M15.5 8.5a5 5 0 0 1 0 7M19 5.5a9 9 0 0 1 0 13"></path>
+    <g id="muteLines" style="display:none;">
+      <line x1="23" y1="9" x2="17" y2="15"></line>
+      <line x1="17" y1="9" x2="23" y2="15"></line>
+    </g>
+  </svg>
+</button>
+
+<script src="convex-client.js"></script>
+<script>
+  /* ----- Dynamic Data from Session / URL / Convex ----- */
+  const q = new URLSearchParams(location.search);
+  const slug = q.get('slug') || sessionStorage.getItem('saybyme_apology_slug') || sessionStorage.getItem('saybyme_proposal_slug');
+  const sessionSender = sessionStorage.getItem('saybyme_sender_name') || 'Me';
+  const sessionMsg = sessionStorage.getItem('saybyme_apology_message');
+
+  const fromEl = document.getElementById('from');
+  const msgEl = document.getElementById('msg');
+
+  if (q.get('from')) fromEl.textContent = q.get('from');
+  else if (sessionSender) fromEl.textContent = sessionSender;
+
+  if (q.get('msg')) msgEl.textContent = q.get('msg');
+  else if (sessionMsg) msgEl.textContent = sessionMsg;
+
+  // Background Convex fetch
+  if (slug && typeof getApologyFromConvex === 'function') {
+    getApologyFromConvex(slug).then(data => {
+      if (data) {
+        if (data.senderName && fromEl) fromEl.textContent = data.senderName;
+        if (data.message && msgEl) msgEl.textContent = data.message;
+      }
+    }).catch(() => {});
+  }
+
+  const bunny = document.getElementById('bunny');
+  const yes = document.getElementById('yes'), later = document.getElementById('later');
+  const note = document.getElementById('note'), title = document.getElementById('title');
+  const audioBtn = document.getElementById('audioBtn');
+  const bgm = document.getElementById('bgmAudio');
+  const soundWaves = document.getElementById('soundWaves');
+  const muteLines = document.getElementById('muteLines');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let soundOn = true, ctx;
+
+  // Attempt auto audio play if previous page was already playing
+  if (bgm) {
+    bgm.play().catch(() => {});
+  }
+
+  /* ----- soft chime sound on yes ----- */
+  function chime(notes = [523.25, 659.25, 783.99, 1046.5]) {
+    if (!soundOn) return;
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      notes.forEach((f, i) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * 0.12;
+        o.type = 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.16, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.85);
+        o.connect(g).connect(ctx.destination);
+        o.start(t); o.stop(t + 0.95);
+      });
+    } catch (e) {}
+  }
+
+  /* ----- audio toggle matching letter.html ----- */
+  audioBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    if (soundOn) {
+      if (bgm && bgm.paused) bgm.play().catch(() => {});
+      soundWaves.style.display = '';
+      muteLines.style.display = 'none';
+      chime([659.25, 880]);
+    } else {
+      if (bgm) bgm.pause();
+      soundWaves.style.display = 'none';
+      muteLines.style.display = '';
+    }
+  });
+
+  /* ----- floating hearts on celebration ----- */
+  function hearts(n) {
+    if (reduce) return;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('class', 'pop');
+      s.innerHTML = '<use href="#h"/>';
+      const size = 12 + Math.random() * 18;
+      s.style.width = s.style.height = size + 'px';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.top = (70 + Math.random() * 30) + 'vh';
+      s.style.opacity = '0.9';
+      document.body.appendChild(s);
+      const a = s.animate([
+        { transform: 'translateY(0) rotate(0)', opacity: 0.9 },
+        { transform: `translate(${Math.random() * 80 - 40}px,-${60 + Math.random() * 60}vh) rotate(${Math.random() * 60 - 30}deg)`, opacity: 0 }
+      ], { duration: 2200 + Math.random() * 1600, delay: Math.random() * 500, easing: 'ease-out' });
+      a.onfinish = () => s.remove();
+    }
+  }
+
+  /* ----- actions on "Yes" ----- */
+  yes.addEventListener('click', () => {
+    bunny.classList.add('happy');
+    title.firstChild.textContent = 'Thank you! ';
+    msgEl.textContent = 'You just made my heart whole again. I promise to cherish you always.';
+    note.textContent = '';
+    yes.textContent = 'Forgiven, with love 💕';
+    yes.disabled = true;
+    later.classList.add('gone');
+    later.disabled = true;
+    later.tabIndex = -1;
+    chime();
+    hearts(36);
+    
+    // Mark forgiven in Convex database
+    if (slug && typeof markApologyForgivenInConvex === 'function') {
+      markApologyForgivenInConvex(slug);
+    }
+  });
+
+  /* ----- the "more time" button runs away: playful & dodges clicks ----- */
+  const sayings = [
+    'Oops! Too slow 🙈', 'Nope, not that one ♡', 'Hehe, it keeps running away!',
+    'Try the pink button 💕', 'You can’t catch it… just say yes ♡', 'Still chasing it? 🥺'
+  ];
+  let dodges = 0, running = false;
+  const rect = el => el.getBoundingClientRect();
+
+  function place(x, y) {
+    later.style.left = x + 'px';
+    later.style.top  = y + 'px';
+  }
+
+  function dodge(e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    if (yes.disabled) return;
+    const w = later.offsetWidth, h = later.offsetHeight;
+
+    if (!running) {
+      const r = rect(later);
+      later.style.width = r.width + 'px';
+      later.style.height = r.height + 'px';
+      later.classList.add('run');
+      later.style.transition = 'none';
+      place(r.left, r.top);
+      later.offsetWidth;
+      later.style.transition = '';
+      running = true;
+    }
+
+    const px = e && e.clientX != null ? e.clientX : null;
+    const py = e && e.clientY != null ? e.clientY : null;
+    const avoid = [rect(yes), rect(audioBtn)].map(r => ({l: r.left - 12, t: r.top - 12, r: r.right + 12, b: r.bottom + 12}));
+    const pad = 12;
+    let x, y, ok = false;
+    for (let i = 0; i < 60 && !ok; i++) {
+      x = pad + Math.random() * Math.max(1, innerWidth - w - pad * 2);
+      y = pad + Math.random() * Math.max(1, innerHeight - h - pad * 2);
+      const clash = avoid.some(a => x < a.r && x + w > a.l && y < a.b && y + h > a.t);
+      const near  = px !== null && Math.hypot(x + w / 2 - px, y + h / 2 - py) < 140;
+      ok = !clash && !near;
+    }
+    place(x, y);
+
+    note.textContent = sayings[dodges++ % sayings.length];
+    if (!reduce) hearts(2);
+  }
+
+  ['pointerenter', 'pointerdown', 'touchstart', 'click', 'focus'].forEach(ev =>
+    later.addEventListener(ev, dodge, { passive: false }));
+
+  addEventListener('resize', () => {
+    if (!running) return;
+    const r = rect(later);
+    place(Math.min(Math.max(12, r.left), innerWidth - r.width - 12),
+          Math.min(Math.max(12, r.top), innerHeight - r.height - 12));
+  });
+</script>
+</body>
+</html>
