@@ -791,3 +791,36 @@ body {
   width: 0 !important;
   height: 0 !important;
 }
+
+@media (max-width: 480px) {
+  .preview-header {
+    padding: 14px 16px 8px;
+  }
+  .preview-main {
+    padding: 0 12px;
+    gap: 24px;
+  }
+  .phone-device {
+    width: min(94vw, 340px) !important;
+    height: min(168vw, 620px) !important;
+    border-radius: 40px !important;
+    padding: 10px !important;
+  }
+  .phone-screen {
+    border-radius: 32px !important;
+  }
+  .phone-live-iframe {
+    border-radius: 32px !important;
+  }
+  .surprise-card {
+    padding: 20px 16px !important;
+    border-radius: 26px !important;
+  }
+  .card-actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .btn-send-main, .btn-secondary-action {
+    width: 100% !important;
+  }
+}

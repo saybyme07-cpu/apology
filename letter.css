@@ -20,9 +20,13 @@
 html, body {
   width: 100%;
   min-height: 100%;
+  min-height: 100svh;
+  min-height: 100dvh;
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   color: var(--ink);
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
   background-color: var(--paper-bg);
@@ -79,6 +83,7 @@ body::-webkit-scrollbar,
 .scene-stage {
   width: 100%;
   min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   transition: opacity 0.35s ease, transform 0.35s ease;
@@ -101,6 +106,7 @@ body::-webkit-scrollbar,
   width: 100%;
   flex: 1;
   min-height: 100svh;
+  min-height: 100dvh;
   background: var(--paper-linear);
   border-radius: 0;
   border: none;
@@ -253,19 +259,20 @@ body::-webkit-scrollbar,
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 24px 20px 24px 20px;
+  padding: max(18px, env(safe-area-inset-top) + 6px) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom) + 8px) max(16px, env(safe-area-inset-left));
   max-width: 500px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Greeting */
 .letter-greeting {
   font-family: 'Caveat', cursive;
-  font-size: 30px;
+  font-size: clamp(24px, 6.8vw, 30px);
   color: #851c3f;
   line-height: 1.2;
-  margin-bottom: 14px;
+  margin-bottom: clamp(8px, 2.5vw, 14px);
   font-weight: 700;
 }
 
@@ -320,8 +327,8 @@ body::-webkit-scrollbar,
 }
 
 .typed-text {
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: clamp(13.5px, 3.8vw, 15px);
+  line-height: 1.65;
   color: #381a29;
   font-weight: 400;
   display: inline-block;
@@ -367,15 +374,17 @@ body::-webkit-scrollbar,
 .btn-next-scene {
   border: 0;
   cursor: pointer;
-  padding: 13px 36px;
+  padding: clamp(11px, 3vw, 13px) clamp(28px, 8vw, 36px);
   border-radius: 999px;
-  font: 600 15px 'Poppins', sans-serif;
+  font: 600 clamp(14px, 3.8vw, 15px) 'Poppins', sans-serif;
   background: var(--crimson-gradient);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   box-shadow: 0 6px 20px rgba(216, 27, 79, 0.35);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -470,7 +479,7 @@ body::-webkit-scrollbar,
 }
 
 .special-gif-img {
-  width: 135px;
+  width: clamp(105px, 28vw, 135px);
   max-width: 100%;
   height: auto;
   display: block;
@@ -488,7 +497,7 @@ body::-webkit-scrollbar,
 
 /* Hug GIF and Block on Page 4 */
 .hug-gif-img {
-  width: 140px;
+  width: clamp(110px, 30vw, 140px);
 }
 
 .hug-block {
@@ -502,7 +511,7 @@ body::-webkit-scrollbar,
 
 /* Story GIF and Block on Page 5 */
 .story-gif-img {
-  width: 145px;
+  width: clamp(115px, 32vw, 145px);
 }
 
 .story-block {
