@@ -58,28 +58,31 @@
   .stage-wrap {
     position: relative;
     width: 100%;
-    max-width: 360px;
+    max-width: 380px;
     min-height: 100svh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    padding: max(16px, env(safe-area-inset-top) + 6px) max(14px, env(safe-area-inset-left)) max(72px, env(safe-area-inset-bottom) + 52px) max(14px, env(safe-area-inset-right));
     text-align: center;
     margin: 0 auto;
     z-index: 1;
+    box-sizing: border-box;
   }
 
   /* Optional Gentle Top Tag */
   .top-tag {
     font-family: 'Caveat', cursive;
-    font-size: 26px;
+    font-size: clamp(24px, 6.5vw, 28px);
     font-weight: 700;
     color: var(--wine);
     margin-bottom: 2px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    line-height: 1.1;
   }
 
   .top-tag svg {
@@ -91,14 +94,20 @@
   /* ---------- The Heart Interactive Button ---------- */
   .heart-btn {
     position: relative;
-    width: min(84vw, 300px);
+    width: min(80vw, 280px);
+    aspect-ratio: 904 / 880;
+    max-height: min(38vh, 280px);
     border: 0;
     background: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     border-radius: 40px;
-    margin: 4px auto 10px;
+    margin: 4px auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.2s ease;
+    touch-action: manipulation;
   }
 
   .heart-btn:focus-visible {
@@ -560,7 +569,7 @@
 <body>
 
 <!-- Audio Player -->
-<audio id="bgmAudio" src="assets/bgm.m4a" loop preload="auto"></audio>
+<audio id="bgmAudio" src="assets/The-Open-Sky-chosic.com_.mp3" loop preload="auto"></audio>
 
 <main class="stage-wrap" id="stageWrap">
   
@@ -713,10 +722,6 @@
     
     <h2 class="popup-title" id="popupTitle">All Patched Up! ♡</h2>
     <p class="popup-sub">Thank you for forgiving me</p>
-    
-    <p class="popup-text" id="popupMsg">
-      You just made my heart whole again. Thank you for your kindness, patience, and love. I promise to cherish you always.
-    </p>
 
     <div class="popup-sign">
       Forever with sincere love,
@@ -730,6 +735,7 @@
 </div>
 
 <script src="convex-client.js"></script>
+<script src="bgm.js"></script>
 <script>
   /* ----- Data Integration from URL / Session / Convex ----- */
   const q = new URLSearchParams(location.search);
@@ -738,15 +744,9 @@
   const sessionMsg = sessionStorage.getItem('saybyme_apology_message');
 
   const popupSender = document.getElementById('popupSender');
-  const popupMsg = document.getElementById('popupMsg');
 
   if (q.get('from')) popupSender.textContent = q.get('from');
   else if (sessionSender) popupSender.textContent = sessionSender;
-
-  if (sessionMsg) {
-    // Custom note if sender provided one
-    popupMsg.textContent = "You just made my heart whole again. Thank you for forgiving me and holding my heart with care.";
-  }
 
   if (slug && typeof getApologyFromConvex === 'function') {
     getApologyFromConvex(slug).then(data => {
@@ -777,24 +777,12 @@
 
   const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 
-  // Audio Playback
+  // Audio Playback & Sound Synchronization (Managed by bgm.js)
   if (bgm) {
-    bgm.play().catch(() => {});
+    bgm.addEventListener('play', () => { soundOn = true; });
+    bgm.addEventListener('pause', () => { soundOn = false; });
+    soundOn = !bgm.paused;
   }
-
-  audioBtn.addEventListener('click', () => {
-    soundOn = !soundOn;
-    if (soundOn) {
-      if (bgm && bgm.paused) bgm.play().catch(() => {});
-      soundWaves.style.display = '';
-      muteLines.style.display = 'none';
-      playChime([659.25, 880]);
-    } else {
-      if (bgm) bgm.pause();
-      soundWaves.style.display = 'none';
-      muteLines.style.display = '';
-    }
-  });
 
   /* ----- Melodic Tone Chimes ----- */
   function playChime(freqs = [523.25, 659.25, 783.99, 1046.5], speed = 0.11) {

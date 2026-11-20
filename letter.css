@@ -259,7 +259,7 @@ body::-webkit-scrollbar,
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: max(18px, env(safe-area-inset-top) + 6px) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom) + 8px) max(16px, env(safe-area-inset-left));
+  padding: max(18px, env(safe-area-inset-top) + 6px) max(16px, env(safe-area-inset-right)) max(68px, env(safe-area-inset-bottom) + 50px) max(16px, env(safe-area-inset-left));
   max-width: 500px;
   margin: 0 auto;
   width: 100%;
@@ -454,18 +454,19 @@ body::-webkit-scrollbar,
 /* Responsive adjustments */
 @media (max-width: 420px) {
   .sheet-content {
-    padding: 20px 16px 20px 16px;
+    padding: max(16px, env(safe-area-inset-top) + 6px) 14px max(68px, env(safe-area-inset-bottom) + 50px) 14px;
   }
   .letter-greeting {
-    font-size: 27px;
+    font-size: 26px;
   }
   .gif-item {
-    width: 110px;
-    height: 95px;
+    width: 105px;
+    height: 90px;
   }
   .btn-next-scene {
-    padding: 12px 30px;
-    font-size: 14.5px;
+    padding: 12px 28px;
+    font-size: 14px;
+    min-height: 44px;
   }
 }
 

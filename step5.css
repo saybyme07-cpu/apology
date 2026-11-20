@@ -562,124 +562,291 @@ body {
   gap: 24px;
 }
 
-.surprise-card {
+/* ==========================================================================
+   NEW SUMMARY CARD MATCHING DESIGN SPECIFICATION (IMAGE 2)
+   ========================================================================== */
+.surprise-card-new {
+  position: relative;
   background: #ffffff;
-  border-radius: 32px;
-  box-shadow: 0 16px 45px rgba(216, 27, 79, 0.08);
-  padding: 34px 38px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 36px;
+  box-shadow: 0 20px 50px rgba(225, 45, 95, 0.09), 0 2px 12px rgba(0, 0, 0, 0.03);
+  padding: 34px 34px 28px;
+  border: 1px solid rgba(255, 230, 238, 0.9);
+  display: flex;
+  flex-direction: column;
 }
 
-.surprise-title {
-  font-family: 'Fredoka', cursive, sans-serif;
-  font-size: 26px;
-  color: #872444;
-  font-weight: 700;
+/* Card Header */
+.summary-card-header {
+  text-align: center;
   margin-bottom: 22px;
 }
 
-.surprise-details-table {
+.summary-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-style: italic;
+  font-weight: 700;
+  color: #99153a;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.summary-card-title .title-heart {
+  font-style: normal;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  color: #99153a;
+  font-size: 22px;
+}
+
+.summary-card-sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  color: #7a6872;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Rows List */
+.summary-info-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  margin-bottom: 18px;
 }
 
-.detail-row {
+.info-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 15px;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: 1px solid #f8eaf0;
 }
 
-.detail-label {
-  color: #855f71;
+.info-label-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-icon {
+  width: 19px;
+  height: 19px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.info-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14.5px;
+  color: #2b1722;
   font-weight: 500;
 }
 
-.detail-value {
-  color: #2c1322;
+.info-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
   font-weight: 700;
+  color: #1a0d14;
+  text-align: right;
 }
 
-.detail-value.strong {
-  font-weight: 700;
-  color: #2b1224;
-}
-
-.detail-row.plays-row {
+/* Plays in order Section */
+.plays-order-section {
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 10px;
-  margin-top: 6px;
-  padding-top: 12px;
-  border-top: 1px dashed #f6cbd7;
+  margin-bottom: 14px;
 }
 
-.plays-chips {
+.plays-order-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #2a1420;
+}
+
+.plays-chips-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-}
-
-.chip-badge {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: #fde6ee;
-  color: #b8123f;
-  border: 1px solid rgba(216, 27, 79, 0.2);
-}
-
-.chip-badge.chip-fireworks {
-  background: #f5e8f0;
-  color: #6a244d;
-}
-
-/* Summary Actions */
-.summary-actions {
-  display: flex;
+  gap: 8px;
   align-items: center;
-  gap: 16px;
+  max-width: calc(100% - 95px);
 }
 
-.btn-action {
+.order-chip {
+  background: #fff0f4;
+  border: 1px solid #ffd4df;
+  color: #8c173a;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(225, 45, 95, 0.04);
+}
+
+.order-chip .chip-emoji {
+  font-size: 13px;
+}
+
+/* Unlock Box Wrap with Mascot Bear */
+.unlock-box-wrap {
+  position: relative;
+  margin-top: 18px;
+}
+
+/* Mascot Bear anchored to top-right of the unlock box */
+.mascot-bear-anchor {
+  position: absolute;
+  right: 12px;
+  bottom: calc(100% - 24px);
+  width: 90px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.mascot-bear-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 12px rgba(216, 27, 79, 0.16));
+}
+
+.bear-floating-heart {
+  position: absolute;
+  color: #e23d68;
+  font-size: 14px;
+  animation: floatHeartTiny 2.5s ease-in-out infinite;
+}
+
+.bear-floating-heart.heart-1 {
+  top: -6px;
+  right: 28px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.bear-floating-heart.heart-2 {
+  top: 8px;
+  right: 8px;
+  font-size: 10px;
+  opacity: 0.75;
+  animation-delay: 1.2s;
+}
+
+@keyframes floatHeartTiny {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.1); }
+}
+
+/* Inner Pink Unlock Box */
+.unlock-box-inner {
+  background: linear-gradient(180deg, #fff2f6 0%, #ffedf2 100%);
+  border: 1px solid #fedfe7;
+  border-radius: 26px;
+  padding: 22px 22px 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.lock-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #fed1dc;
+  box-shadow: 0 4px 12px rgba(225, 45, 95, 0.1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  height: 56px;
-  border-radius: 999px;
-  cursor: pointer;
-  font: 600 17px 'Poppins', sans-serif;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border: 0;
+  margin-bottom: 10px;
 }
 
-.btn-action.back {
-  padding: 0 28px;
-  background: #ffffff;
-  border: 1.5px solid var(--crimson);
-  color: var(--crimson);
-  box-shadow: 0 4px 14px rgba(216, 27, 79, 0.08);
+.unlock-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #8a1336;
+  margin: 0 0 6px;
 }
 
-.btn-action.back:hover {
-  background: #fff5f8;
-  transform: translateY(-2px);
+.unlock-subtext {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12.5px;
+  color: #6e5963;
+  line-height: 1.45;
+  max-width: 300px;
+  margin: 0 auto 16px;
 }
 
-.btn-action.continue {
-  flex: 1;
-  background: var(--crimson-gradient);
+.btn-unlock-link {
+  width: 100%;
+  background: linear-gradient(135deg, #d81b4f 0%, #b8123f 100%);
   color: #ffffff;
-  box-shadow: 0 10px 24px rgba(216, 27, 79, 0.32);
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 22px rgba(216, 27, 79, 0.35);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+  outline: none;
 }
 
-.btn-action.continue:hover {
+.btn-unlock-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(216, 27, 79, 0.42);
+  box-shadow: 0 12px 28px rgba(216, 27, 79, 0.45);
+}
+
+.btn-unlock-link:active {
+  transform: translateY(1px);
+}
+
+/* Back to Edit Button centered below card */
+.back-edit-bottom {
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.btn-back-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid #f29bb0;
+  color: #d12957;
+  border-radius: 999px;
+  padding: 9px 24px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(216, 27, 79, 0.08);
+  transition: all 0.2s ease;
+}
+
+.btn-back-pill:hover {
+  background: #fff5f8;
+  border-color: #d12957;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(216, 27, 79, 0.14);
 }
 
 /* Floating Audio Toggle Button */
@@ -725,8 +892,9 @@ body {
   .main-title {
     font-size: 36px;
   }
-  .surprise-card {
-    padding: 24px 26px;
+  .surprise-card,
+  .surprise-card-new {
+    padding: 24px 22px;
   }
 }
 
@@ -812,9 +980,61 @@ body {
   .phone-live-iframe {
     border-radius: 32px !important;
   }
-  .surprise-card {
-    padding: 20px 16px !important;
-    border-radius: 26px !important;
+  .surprise-card,
+  .surprise-card-new {
+    padding: 22px 18px 20px !important;
+    border-radius: 28px !important;
+    width: 100% !important;
+    max-width: min(94vw, 420px) !important;
+    margin: 0 auto !important;
+  }
+  .summary-card-title {
+    font-size: 22px !important;
+  }
+  .summary-card-sub {
+    font-size: 12.5px !important;
+  }
+  .info-row {
+    padding: 10px 0 !important;
+  }
+  .info-label {
+    font-size: 13.5px !important;
+  }
+  .info-value {
+    font-size: 13.5px !important;
+  }
+  .plays-chips-row {
+    max-width: calc(100% - 74px) !important;
+    gap: 6px !important;
+  }
+  .order-chip {
+    padding: 5px 10px !important;
+    font-size: 11.5px !important;
+  }
+  .unlock-box-inner {
+    padding: 18px 14px 16px !important;
+    border-radius: 20px !important;
+  }
+  .unlock-title {
+    font-size: 18px !important;
+  }
+  .unlock-subtext {
+    font-size: 12px !important;
+  }
+  .btn-unlock-link {
+    font-size: 13.5px !important;
+    padding: 12px 18px !important;
+    min-height: 44px !important;
+  }
+  .btn-back-pill {
+    font-size: 13px !important;
+    padding: 8px 22px !important;
+    min-height: 42px !important;
+  }
+  .mascot-bear-anchor {
+    width: 70px !important;
+    right: 8px !important;
+    bottom: calc(100% - 16px) !important;
   }
   .card-actions {
     flex-direction: column !important;
@@ -822,5 +1042,30 @@ body {
   }
   .btn-send-main, .btn-secondary-action {
     width: 100% !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .surprise-card-new {
+    padding: 18px 14px 16px !important;
+    border-radius: 24px !important;
+  }
+  .summary-card-title {
+    font-size: 20px !important;
+  }
+  .info-label, .info-value {
+    font-size: 12.5px !important;
+  }
+  .plays-chips-row {
+    max-width: calc(100% - 66px) !important;
+    gap: 4px !important;
+  }
+  .order-chip {
+    font-size: 10.5px !important;
+    padding: 4px 8px !important;
+  }
+  .mascot-bear-anchor {
+    width: 62px !important;
+    right: 4px !important;
   }
 }

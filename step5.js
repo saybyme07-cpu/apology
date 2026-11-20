@@ -92,46 +92,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   const summaryQuestion = document.getElementById('summaryQuestion');
   if (summaryQuestion) summaryQuestion.textContent = whatHappened;
 
-  // Update chips in summary
+  const summaryMessageType = document.getElementById('summaryMessageType');
+  if (summaryMessageType) summaryMessageType.textContent = 'Apology';
+
+  // Ensure Chips in summary match design: Sorry Letter, Cute GIFs, Heart Animation
   const playsChips = document.getElementById('playsChips');
-  if (playsChips) {
-    const themeLabel = theme === 'garden' ? '🌸 Garden Peace Offering' : '✨ Mending Hearts Kittens';
+  if (playsChips && !playsChips.querySelector('.chip-letter')) {
     playsChips.innerHTML = `
-      <span class="chip-badge chip-gif">${themeLabel}</span>
-      <span class="chip-badge chip-fireworks">${sticker}</span>
+      <span class="order-chip chip-letter"><span class="chip-emoji">💌</span> Sorry Letter</span>
+      <span class="order-chip chip-gifs"><span class="chip-emoji">💖</span> Cute GIFs</span>
+      <span class="order-chip chip-heart"><span class="chip-emoji">💗</span> Heart Animation</span>
     `;
   }
 
-  // Floating Audio Toggle Button on Step 5
-  const audioToggleBtn = document.getElementById('audioToggleBtn');
-  const bgmAudio = document.getElementById('bgmAudio');
-  let isPlaying = false;
-
-  if (audioToggleBtn && bgmAudio) {
-    audioToggleBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        bgmAudio.pause();
-        isPlaying = false;
-        audioToggleBtn.innerHTML = `
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
-        `;
-      } else {
-        bgmAudio.play().then(() => {
-          isPlaying = true;
-          audioToggleBtn.innerHTML = `
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          `;
-        }).catch(() => {});
-      }
-    });
-  }
+  // Floating Audio Toggle Button managed by bgm.js
 
   // Continue Final Action -> Copy Live Shareable URL
   const btnContinueFinal = document.getElementById('btnContinueFinal');

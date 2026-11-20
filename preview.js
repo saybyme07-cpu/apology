@@ -128,25 +128,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (isOpening) return;
     isOpening = true;
 
-    playChimeSound();
-
-    const audio = document.getElementById('bgmAudio');
-    if (audio && audio.paused) {
-      audio.play().catch(() => {});
+    if (envelopeBox) {
+      envelopeBox.style.transform = 'scale(0.96)';
+      envelopeBox.style.transition = 'transform 0.15s ease';
     }
 
-    // 1. Open envelope flap
-    envelopeBox.classList.add('opened');
-    burstSealConfetti();
+    if (window.saybymeBgm) {
+      window.saybymeBgm.play();
+    }
 
-    // 2. Smoothly transition directly to letter.html where the letter rolls down once
-    setTimeout(() => {
-      sceneEnvelope.classList.add('fade-out');
-      setTimeout(() => {
-        const t = Date.now();
-        window.location.href = slug ? `letter.html?slug=${slug}&t=${t}` : `letter.html?t=${t}`;
-      }, 200);
-    }, 380);
+    // Direct immediate transition to next page (letter.html) without showing letter shade/delay
+    const t = Date.now();
+    const nextUrl = slug ? `letter.html?slug=${slug}&t=${t}` : `letter.html?t=${t}`;
+    window.location.href = nextUrl;
   }
 
   function triggerEnvelopeFoldBack() {
@@ -267,34 +261,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // 7. Audio Button
-  const audioBtn = document.getElementById('audioBtn');
-  const audio = document.getElementById('bgmAudio');
-  let isPlaying = false;
-
-  if (audioBtn && audio) {
-    audioBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        audio.pause();
-        isPlaying = false;
-        audioBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
-        `;
-      } else {
-        audio.play().then(() => {
-          isPlaying = true;
-          audioBtn.innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          `;
-        }).catch(() => {});
-      }
-    });
-  }
+  // 7. Audio Button managed by bgm.js
 });

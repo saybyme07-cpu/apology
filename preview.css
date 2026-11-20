@@ -100,7 +100,7 @@ body::-webkit-scrollbar,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  padding: max(18px, env(safe-area-inset-top) + 8px) max(16px, env(safe-area-inset-right)) max(68px, env(safe-area-inset-bottom) + 50px) max(16px, env(safe-area-inset-left));
   overflow: hidden !important;
   box-sizing: border-box;
   user-select: none;
@@ -415,15 +415,12 @@ body::-webkit-scrollbar,
 
 /* OPENED STATE */
 .envelope-box.opened .env-flap-top {
-  transform: rotateX(180deg);
-  z-index: 1;
+  display: none !important;
 }
 
 .envelope-box.opened .wax-seal-btn {
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(1.4);
-  transition: opacity 0.3s ease, transform 0.4s ease;
 }
 
 .envelope-box.opened .env-letter-peek {
@@ -705,19 +702,28 @@ body::-webkit-scrollbar,
 /* Responsive on Small Screens */
 @media (max-width: 480px) {
   .mobile-screen-stage {
-    padding: 0;
+    padding: max(16px, env(safe-area-inset-top) + 6px) max(14px, env(safe-area-inset-right)) max(68px, env(safe-area-inset-bottom) + 50px) max(14px, env(safe-area-inset-left));
+  }
+  .envelope-scene-content {
+    transform: translateY(-12px);
   }
   .envelope-float-wrap {
-  position: relative;
-  width: min(88vw, 320px);
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: envelopeBob 4s ease-in-out infinite;
-}
+    position: relative;
+    width: min(84vw, 290px);
+    aspect-ratio: 16 / 10;
+    height: auto;
+    max-height: 185px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: envelopeBob 4s ease-in-out infinite;
+  }
+  .letter-title {
+    font-size: clamp(26px, 7.2vw, 34px);
+  }
   .letter-card-full {
-    padding: 22px 18px;
+    padding: 20px 16px;
   }
 }
 

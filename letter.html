@@ -15,7 +15,7 @@
 <body>
 
 <!-- Audio Player -->
-<audio id="bgmAudio" src="assets/bgm.m4a" loop preload="auto"></audio>
+<audio id="bgmAudio" src="assets/The-Open-Sky-chosic.com_.mp3" loop preload="auto"></audio>
 
 <!-- Audio Mute Button in Bottom-Right -->
 <button type="button" class="audio-btn" id="audioBtn" aria-label="Toggle background music">
@@ -292,6 +292,7 @@
 </div>
 
 <script src="convex-client.js"></script>
+<script src="bgm.js"></script>
 <script>
 // SayByMe – 100% Static Box with Smooth Typewriter Controller
 document.addEventListener('DOMContentLoaded', () => {
@@ -351,17 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const bgm = document.getElementById('bgmAudio');
+  let isAudioPlaying = false;
   if (bgm) {
-    if (sessionStorage.getItem('saybyme_audio_muted') !== 'true') {
-      bgm.play().then(() => { isAudioPlaying = true; }).catch(() => {});
-      const playOnGesture = () => {
-        if (sessionStorage.getItem('saybyme_audio_muted') !== 'true' && bgm.paused) {
-          bgm.play().then(() => { isAudioPlaying = true; }).catch(() => {});
-        }
-      };
-      window.addEventListener('click', playOnGesture, { capture: true, once: true });
-      window.addEventListener('touchstart', playOnGesture, { capture: true, once: true });
-    }
+    bgm.addEventListener('play', () => { isAudioPlaying = true; });
+    bgm.addEventListener('pause', () => { isAudioPlaying = false; });
   }
 
   // Helper to make the message box 100% STATIC so it never resizes, expands, or bounces while typing
@@ -668,37 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Audio Control Toggle Button
-  const audioBtn = document.getElementById('audioBtn');
-  let isAudioPlaying = false;
-  if (audioBtn && bgm) {
-    audioBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (isAudioPlaying) {
-        bgm.pause();
-        isAudioPlaying = false;
-        sessionStorage.setItem('saybyme_audio_muted', 'true');
-        audioBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
-        `;
-      } else {
-        sessionStorage.setItem('saybyme_audio_muted', 'false');
-        bgm.play().then(() => {
-          isAudioPlaying = true;
-          audioBtn.innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d12957" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          `;
-        }).catch(() => {});
-      }
-    });
-  }
+  // Audio Control Toggle Button managed by bgm.js
 
   // Direct page parameter check: ?page=5 or ?page=4 or ?page=3 allows testing directly!
   const targetPage = urlParams.get('page') || urlParams.get('stage');
