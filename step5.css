@@ -279,14 +279,12 @@ body {
 }
 
 .envelope-shadow {
-  position: absolute;
-  bottom: -15px;
-  left: 5%;
-  width: 90%;
-  height: 20px;
-  background: radial-gradient(ellipse at 50% 50%, rgba(190, 40, 80, 0.28) 0%, transparent 70%);
-  border-radius: 50%;
-  transition: all 0.5s ease;
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  pointer-events: none !important;
 }
 
 .envelope {
