@@ -490,25 +490,11 @@
       transform: scale(0.8) translateY(30px);
       transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
       box-sizing: border-box;
+      margin: auto;
     }
 
     .celebrate-modal.active .celebrate-card {
-      position: relative;
-      width: min(92vw, 330px);
-      max-width: 330px;
-      max-height: min(88svh, 580px);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      background: linear-gradient(165deg, #ffffff 0%, #fff7fa 55%, #ffeef3 100%);
-      border: 2px solid #ffd1dc;
-      box-shadow: 0 24px 60px rgba(216, 27, 79, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.85);
-      border-radius: 26px;
-      padding: 24px 18px 20px;
-      text-align: center;
-      transform: scale(0.8) translateY(30px);
-      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-sizing: border-box;
+      transform: scale(1) translateY(0);
     }
 
     .modal-close-btn {
@@ -528,30 +514,6 @@
       justify-content: center;
       transition: background 0.2s;
     }
-
-  .celebrate-card {
-    position: relative;
-    width: min(92vw, 330px);
-    max-width: 330px;
-    max-height: min(88svh, 580px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    background: linear-gradient(165deg, #ffffff 0%, #fff7fa 55%, #ffeef3 100%);
-    border: 2px solid #ffd1dc;
-    box-shadow: 0 24px 60px rgba(216, 27, 79, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.85);
-    border-radius: 26px;
-    padding: 24px 18px 20px;
-    text-align: center;
-    transform: scale(0.8) translateY(30px);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-sizing: border-box;
-    margin: auto;
-  }
-
-  .celebrate-modal.active .celebrate-card {
-    transform: scale(1) translateY(0);
-  }
 
     @keyframes badgePulse {
 
@@ -979,7 +941,32 @@
     </svg>
   </button>
 
+  <!-- =========================================================================
+       CELEBRATION POPUP DIALOG (Appears automatically once patched up)
+       ========================================================================= -->
+  <div class="celebrate-modal" id="celebrateModal" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+    <div class="celebrate-card">
+      <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">×</button>
 
+      <div class="badge-icon-wrap">💖</div>
+
+      <h2 class="popup-title" id="popupTitle">All Patched Up! ♡</h2>
+      <p class="popup-sub">Thank you for forgiving me</p>
+
+      <p class="popup-text" id="popupMsg">
+        You just made my heart whole again. Thank you for forgiving me and holding my heart with care.
+      </p>
+
+      <div class="popup-sign">
+        Forever with sincere love,
+        <strong class="sender-name" id="popupSender">Me</strong>
+      </div>
+
+      <button type="button" class="btn-celebrate-action" id="btnWeAreGood">
+        <span>We're Good Now! 💕</span>
+      </button>
+    </div>
+  </div>
 
   <script src="convex-client.js"></script>
   <script src="bgm.js"></script>
@@ -992,19 +979,25 @@
 
     const popupSender = document.getElementById('popupSender');
     const popupMsg = document.getElementById('popupMsg');
+    const celebrateModal = document.getElementById('celebrateModal');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const btnWeAreGood = document.getElementById('btnWeAreGood');
 
-    if (q.get('from')) popupSender.textContent = q.get('from');
-    else if (sessionSender) popupSender.textContent = sessionSender;
+    const senderName = q.get('from') || sessionSender;
+    if (popupSender) popupSender.textContent = senderName;
 
-    if (sessionMsg) {
-      // Custom note if sender provided one
-      popupMsg.textContent = "You just made my heart whole again. Thank you for forgiving me and holding my heart with care.";
+    if (popupMsg) {
+      if (q.get('msg')) popupMsg.textContent = q.get('msg');
+      else if (sessionMsg) popupMsg.textContent = sessionMsg;
     }
 
     if (slug && typeof getApologyFromConvex === 'function') {
       getApologyFromConvex(slug).then(data => {
         if (data && data.senderName && popupSender) {
           popupSender.textContent = data.senderName;
+        }
+        if (data && data.message && popupMsg) {
+          popupMsg.textContent = data.message;
         }
       }).catch(() => { });
     }
@@ -1197,6 +1190,15 @@
         if (newX > winW - 90 && newY > winH - 95) {
           dist = 0;
         }
+
+        // Prevent jumping on top of or near btnAccept
+        if (btnAccept) {
+          const aRect = btnAccept.getBoundingClientRect();
+          const distToAccept = Math.hypot((newX + btnW / 2) - (aRect.left + aRect.width / 2), (newY + btnH / 2) - (aRect.top + aRect.height / 2));
+          if (distToAccept < 110) {
+            dist = 0;
+          }
+        }
         attempts++;
       } while (dist < minDistance && attempts < 40);
 
@@ -1217,6 +1219,9 @@
     // Mobile Touch Proximity Dodge: jumps before finger can finish touching
     document.addEventListener('touchstart', (e) => {
       if (healed || busy || !btnNeedTime) return;
+      if (e.target && (e.target.closest('#btnAccept') || e.target.closest('#heartBtn') || e.target.closest('#audioBtn') || e.target.closest('.celebrate-modal'))) {
+        return;
+      }
       const touch = e.touches[0];
       if (!touch) return;
       const rect = btnNeedTime.getBoundingClientRect();
@@ -1224,7 +1229,7 @@
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const dist = Math.hypot(touch.clientX - centerX, touch.clientY - centerY);
-      if (dist < 110) {
+      if (dist < 68) {
         dodge(touch);
       }
     }, { passive: true });
@@ -1232,12 +1237,15 @@
     // Mouse & Pointer Proximity Dodge: runs away when cursor gets anywhere near
     const handlePointerProximity = (e) => {
       if (healed || busy || !btnNeedTime) return;
+      if (e.target && (e.target.closest('#btnAccept') || e.target.closest('#heartBtn') || e.target.closest('#audioBtn') || e.target.closest('.celebrate-modal'))) {
+        return;
+      }
       const rect = btnNeedTime.getBoundingClientRect();
       if (rect.width === 0) return;
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
-      if (dist < 135) {
+      if (dist < 75) {
         dodge(e);
       }
     };
@@ -1440,24 +1448,71 @@
         startFallingLoveSymbols(60);
         launchCelebrationConfetti();
 
+        // 6. Reveal Celebration Popup Dialog smoothly after 750ms
+        setTimeout(() => {
+          if (celebrateModal) {
+            celebrateModal.classList.add('active');
+            launchCelebrationConfetti();
+          }
+        }, 750);
+
       }, 3200);
     }
 
     // Apology accepted button triggers the patch animation and celebration!
     if (btnAccept) {
-      btnAccept.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      const handleAccept = (e) => {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (busy || healed) return;
+        heal();
+      };
+      btnAccept.addEventListener('click', handleAccept);
+      btnAccept.addEventListener('touchend', handleAccept);
+    }
+
+    // Clicking heart also triggers accept
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        if (busy || healed) return;
+        heal();
+      });
+      btn.addEventListener('touchend', (e) => {
         if (busy || healed) return;
         heal();
       });
     }
 
-    // Clicking heart also triggers accept
-    btn.addEventListener('click', () => {
-      if (busy || healed) return;
-      heal();
-    });
+    // Close celebration modal
+    if (modalCloseBtn && celebrateModal) {
+      modalCloseBtn.addEventListener('click', () => {
+        celebrateModal.classList.remove('active');
+      });
+    }
+
+    if (celebrateModal) {
+      celebrateModal.addEventListener('click', (e) => {
+        if (e.target === celebrateModal) {
+          celebrateModal.classList.remove('active');
+        }
+      });
+    }
+
+    // Action button inside celebration modal
+    if (btnWeAreGood && celebrateModal) {
+      btnWeAreGood.addEventListener('click', () => {
+        btnWeAreGood.innerHTML = '<span>Big Hug Sent! 🥰</span>';
+        btnWeAreGood.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        burst();
+        launchCelebrationConfetti();
+        playChime([659.25, 880, 1046.5], 0.08);
+        setTimeout(() => {
+          celebrateModal.classList.remove('active');
+        }, 1200);
+      });
+    }
   </script>
 </body>
 
