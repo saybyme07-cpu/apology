@@ -1,15 +1,15 @@
 // SayByMe – Live Interactive Apology Experience Controller
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const slug = urlParams.get('slug') || sessionStorage.getItem('saybyme_proposal_slug');
+  const slug = urlParams.get('slug') || sessionStorage.getItem('saybyme_apology_slug') || sessionStorage.getItem('saybyme_proposal_slug');
 
-  // 1. Defaults from Session / Fallback
-  let recipient = sessionStorage.getItem('saybyme_user_name') || 'b';
-  let sender = sessionStorage.getItem('saybyme_sender_name') || 'a';
-  let reason = sessionStorage.getItem('saybyme_apology_reason') || 'I know I hurt your feelings earlier, and seeing you upset broke my heart.';
-  let message = sessionStorage.getItem('saybyme_apology_message') || 'I am truly, deeply sorry from the bottom of my heart. You mean everything to me, and my priority will always be protecting your smile and cherishing our relationship. I promise to listen better, understand deeper, and never take you for granted.';
-  let sticker = sessionStorage.getItem('saybyme_patchup_sticker') || '💖 100% Sincere';
-  let theme = sessionStorage.getItem('saybyme_patchup_theme') || 'kittens';
+  // 1. Defaults from URL Params / Session / Fallback
+  let recipient = urlParams.get('for') || urlParams.get('to') || urlParams.get('recipient') || sessionStorage.getItem('saybyme_user_name') || 'b';
+  let sender = urlParams.get('from') || urlParams.get('sender') || sessionStorage.getItem('saybyme_sender_name') || 'a';
+  let reason = urlParams.get('why') || urlParams.get('reason') || urlParams.get('question') || sessionStorage.getItem('saybyme_apology_reason') || 'I know I hurt your feelings earlier, and seeing you upset broke my heart.';
+  let message = urlParams.get('msg') || urlParams.get('message') || sessionStorage.getItem('saybyme_apology_message') || 'I am truly, deeply sorry from the bottom of my heart. You mean everything to me, and my priority will always be protecting your smile and cherishing our relationship. I promise to listen better, understand deeper, and never take you for granted.';
+  let sticker = urlParams.get('sticker') || sessionStorage.getItem('saybyme_patchup_sticker') || '💖 100% Sincere';
+  let theme = urlParams.get('theme') || sessionStorage.getItem('saybyme_patchup_theme') || 'kittens';
 
   // Load from Convex Database if slug exists
   if (slug && typeof getApologyFromConvex === 'function') {
@@ -137,10 +137,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.saybymeBgm.play();
     }
 
-    // Direct immediate transition to next page (letter.html) without showing letter shade/delay
-    const t = Date.now();
-    const nextUrl = slug ? `letter.html?slug=${slug}&t=${t}` : `letter.html?t=${t}`;
-    window.location.href = nextUrl;
+    // Direct immediate transition to next page (letter.html) preserving all parameters
+    const nextParams = new URLSearchParams(window.location.search);
+    nextParams.set('t', Date.now());
+    if (slug) nextParams.set('slug', slug);
+    if (recipient) nextParams.set('for', recipient);
+    if (sender) nextParams.set('from', sender);
+    if (reason) nextParams.set('why', reason);
+    if (message) nextParams.set('msg', message);
+    if (theme) nextParams.set('theme', theme);
+    if (sticker) nextParams.set('sticker', sticker);
+    window.location.href = `letter.html?${nextParams.toString()}`;
   }
 
   function triggerEnvelopeFoldBack() {

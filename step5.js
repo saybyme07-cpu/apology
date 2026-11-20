@@ -107,32 +107,161 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Floating Audio Toggle Button managed by bgm.js
 
-  // Continue Final Action -> Copy Live Shareable URL
+  // Continue Final Action -> Unlock & Generate Proper Web Application Preview Link
   const btnContinueFinal = document.getElementById('btnContinueFinal');
+  const btnUnlockText = document.getElementById('btnUnlockText');
+  const unlockPromptView = document.getElementById('unlockPromptView');
+  const unlockSuccessView = document.getElementById('unlockSuccessView');
+  const unlockedRecipientName = document.getElementById('unlockedRecipientName');
+  const unlockedUrlInput = document.getElementById('unlockedUrlInput');
+  const btnCopyInline = document.getElementById('btnCopyInline');
+  const copyInlineText = document.getElementById('copyInlineText');
+  const btnOpenLivePreview = document.getElementById('btnOpenLivePreview');
+  const btnShareWhatsAppInline = document.getElementById('btnShareWhatsAppInline');
+
+  // Modal elements
+  const linkModalOverlay = document.getElementById('linkModalOverlay');
+  const linkModalClose = document.getElementById('linkModalClose');
+  const modalRecipientDisplay = document.getElementById('modalRecipientDisplay');
+  const modalUrlInput = document.getElementById('modalUrlInput');
+  const modalCopyBtn = document.getElementById('modalCopyBtn');
+  const modalCopyText = document.getElementById('modalCopyText');
+  const modalOpenPreviewBtn = document.getElementById('modalOpenPreviewBtn');
+  const modalWhatsAppBtn = document.getElementById('modalWhatsAppBtn');
+
+  function copyTextToClipboard(text, btnElement, labelElement) {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      if (labelElement) {
+        const orig = labelElement.textContent;
+        labelElement.textContent = '✓ Copied!';
+        setTimeout(() => { labelElement.textContent = orig; }, 2200);
+      }
+    }).catch(() => {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        if (labelElement) {
+          const orig = labelElement.textContent;
+          labelElement.textContent = '✓ Copied!';
+          setTimeout(() => { labelElement.textContent = orig; }, 2200);
+        }
+      } catch (e) {}
+      document.body.removeChild(tempInput);
+    });
+  }
+
   if (btnContinueFinal) {
     btnContinueFinal.addEventListener('click', async () => {
+      // 1. Loading UI Feedback
+      btnContinueFinal.disabled = true;
+      if (btnUnlockText) btnUnlockText.textContent = 'Generating Private Link... ✨';
+      btnContinueFinal.style.opacity = '0.9';
+
       let finalSlug = slug;
       if (!finalSlug && typeof saveApologyToConvex === 'function') {
-        const saved = await saveApologyToConvex({
-          senderName: sender,
-          recipientName: recipient,
-          whatHappened: whatHappened,
-          message: message,
-          theme: theme,
-          sticker: sticker
-        });
-        if (saved) finalSlug = saved.slug;
+        try {
+          const saved = await saveApologyToConvex({
+            senderName: sender,
+            recipientName: recipient,
+            whatHappened: whatHappened,
+            message: message,
+            theme: theme,
+            sticker: sticker
+          });
+          if (saved && saved.slug) {
+            finalSlug = saved.slug;
+            sessionStorage.setItem('saybyme_apology_slug', finalSlug);
+          }
+        } catch (err) {
+          console.warn("Could not save to Convex:", err);
+        }
       }
 
-      const shareUrl = finalSlug
-        ? `${window.location.origin}/preview.html?slug=${finalSlug}`
-        : `${window.location.origin}/preview.html`;
+      // If slug is still missing (offline or Convex unavailable), create robust unique slug
+      if (!finalSlug) {
+        finalSlug = 'apology_' + Math.random().toString(36).substring(2, 9);
+        sessionStorage.setItem('saybyme_apology_slug', finalSlug);
+      }
 
+      // 2. Generate Proper Absolute Web Application Preview Link
+      const previewUrlObj = new URL('preview.html', window.location.href);
+      previewUrlObj.searchParams.set('slug', finalSlug);
+      if (sender) previewUrlObj.searchParams.set('from', sender);
+      if (recipient) previewUrlObj.searchParams.set('for', recipient);
+      if (whatHappened) previewUrlObj.searchParams.set('why', whatHappened);
+      if (message) previewUrlObj.searchParams.set('msg', message);
+      if (theme) previewUrlObj.searchParams.set('theme', theme);
+      if (sticker) previewUrlObj.searchParams.set('sticker', sticker);
+
+      const shareUrl = previewUrlObj.href;
+
+      // 3. Update Iframe with live link
+      if (phoneIframe) {
+        phoneIframe.src = shareUrl;
+      }
+
+      // 4. Populate Inline Unlocked Result Box
+      if (unlockedRecipientName) unlockedRecipientName.textContent = recipient;
+      if (unlockedUrlInput) unlockedUrlInput.value = shareUrl;
+      if (btnOpenLivePreview) btnOpenLivePreview.href = shareUrl;
+      if (btnShareWhatsAppInline) {
+        btnShareWhatsAppInline.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('I made something special for you ♡\n' + shareUrl)}`;
+      }
+
+      if (unlockPromptView) unlockPromptView.style.display = 'none';
+      if (unlockSuccessView) unlockSuccessView.style.display = 'block';
+
+      // 5. Populate and Display Celebratory Modal Popup
+      if (modalRecipientDisplay) modalRecipientDisplay.textContent = recipient;
+      if (modalUrlInput) modalUrlInput.value = shareUrl;
+      if (modalOpenPreviewBtn) modalOpenPreviewBtn.href = shareUrl;
+      if (modalWhatsAppBtn) {
+        modalWhatsAppBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('I made something special for you ♡\n' + shareUrl)}`;
+      }
+      if (linkModalOverlay) linkModalOverlay.style.display = 'flex';
+
+      // 6. Auto-copy to clipboard
       try {
         await navigator.clipboard.writeText(shareUrl);
-        alert(`🎉 Copied your live Convex Apology link to clipboard!\n\n${shareUrl}\n\nSend this to ${recipient}!`);
-      } catch (err) {
-        prompt(`Here is your shareable Convex link for ${recipient}:`, shareUrl);
+        if (copyInlineText) copyInlineText.textContent = '✓ Copied!';
+        if (modalCopyText) modalCopyText.textContent = '✓ Copied to Clipboard!';
+        setTimeout(() => {
+          if (copyInlineText) copyInlineText.textContent = 'Copy';
+          if (modalCopyText) modalCopyText.textContent = 'Copy Link';
+        }, 2500);
+      } catch (err) {}
+    });
+  }
+
+  // Inline Copy Button
+  if (btnCopyInline && unlockedUrlInput) {
+    btnCopyInline.addEventListener('click', () => {
+      copyTextToClipboard(unlockedUrlInput.value, btnCopyInline, copyInlineText);
+    });
+  }
+
+  // Modal Copy Button
+  if (modalCopyBtn && modalUrlInput) {
+    modalCopyBtn.addEventListener('click', () => {
+      copyTextToClipboard(modalUrlInput.value, modalCopyBtn, modalCopyText);
+    });
+  }
+
+  // Close Modal
+  if (linkModalClose && linkModalOverlay) {
+    linkModalClose.addEventListener('click', () => {
+      linkModalOverlay.style.display = 'none';
+    });
+  }
+
+  if (linkModalOverlay) {
+    linkModalOverlay.addEventListener('click', (e) => {
+      if (e.target === linkModalOverlay) {
+        linkModalOverlay.style.display = 'none';
       }
     });
   }

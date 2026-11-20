@@ -170,27 +170,60 @@
           <img src="images/mascot-bear-transparent.png" alt="Cute Bear Mascot" class="mascot-bear-img">
         </div>
 
-        <div class="unlock-box-inner">
-          <div class="lock-icon-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a0153e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
+        <div class="unlock-box-inner" id="unlockBoxInner">
+          <!-- State 1: Prompt before unlock -->
+          <div class="unlock-prompt-view" id="unlockPromptView">
+            <div class="lock-icon-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a0153e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+
+            <h3 class="unlock-title">Unlock Your Private Link</h3>
+            <p class="unlock-subtext">Make it live and share your heartfelt apology with the one you care about.</p>
+
+            <button type="button" class="btn-unlock-link" id="btnContinueFinal">
+              <svg class="btn-lock-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span id="btnUnlockText">Unlock Private Link</span>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
           </div>
 
-          <h3 class="unlock-title">Unlock Your Private Link</h3>
-          <p class="unlock-subtext">Make it live and share your heartfelt apology with the one you care about.</p>
+          <!-- State 2: Unlocked Link View (Revealed after clicking unlock) -->
+          <div class="unlock-success-view" id="unlockSuccessView" style="display: none;">
+            <div class="unlocked-icon-badge">
+              <span>🎉</span>
+            </div>
 
-          <button type="button" class="btn-unlock-link" id="btnContinueFinal">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span>Unlock Private Link</span>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
+            <h3 class="unlocked-title">Your Private Link is Ready! ♡</h3>
+            <p class="unlocked-subtext">Send this live preview link to <strong id="unlockedRecipientName">Someone Special</strong>:</p>
+
+            <div class="unlocked-url-field">
+              <input type="text" readonly id="unlockedUrlInput" class="unlocked-url-input" value="" aria-label="Generated Private Apology Link">
+              <button type="button" class="btn-copy-inline" id="btnCopyInline" aria-label="Copy private link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyInlineText">Copy</span>
+              </button>
+            </div>
+
+            <div class="unlocked-actions-grid">
+              <a href="#" target="_blank" id="btnOpenLivePreview" class="btn-action-preview">
+                <span>🚀 Open Live Preview</span>
+              </a>
+              <a href="#" target="_blank" id="btnShareWhatsAppInline" class="btn-action-whatsapp">
+                <span>💬 WhatsApp</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -219,6 +252,36 @@
 </button>
 
 <audio id="bgmAudio" src="assets/The-Open-Sky-chosic.com_.mp3" loop preload="auto"></audio>
+
+<!-- Celebration Modal Popup for Generated Link -->
+<div class="link-modal-overlay" id="linkModalOverlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modalLinkTitle">
+  <div class="link-modal-card">
+    <button type="button" class="link-modal-close" id="linkModalClose" aria-label="Close dialog">×</button>
+    <div class="link-modal-badge">💌</div>
+    <h2 class="link-modal-title" id="modalLinkTitle">Your Apology is Live! ♡</h2>
+    <p class="link-modal-sub">Your private preview link has been generated and copied. Share it with <strong id="modalRecipientDisplay">Someone Special</strong>!</p>
+
+    <div class="link-modal-url-wrap">
+      <input type="text" readonly id="modalUrlInput" class="modal-url-input" value="" aria-label="Generated shareable URL">
+      <button type="button" class="modal-copy-btn" id="modalCopyBtn" aria-label="Copy URL">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span id="modalCopyText">Copy Link</span>
+      </button>
+    </div>
+
+    <div class="link-modal-buttons">
+      <a href="#" target="_blank" id="modalOpenPreviewBtn" class="modal-btn-open">
+        <span>🚀 Open Preview in New Tab</span>
+      </a>
+      <a href="#" target="_blank" id="modalWhatsAppBtn" class="modal-btn-whatsapp">
+        <span>💬 Send on WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</div>
 
 <script src="convex-client.js"></script>
 <script src="bgm.js"></script>

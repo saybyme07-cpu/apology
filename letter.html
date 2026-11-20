@@ -299,11 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const slug = urlParams.get('slug') || sessionStorage.getItem('saybyme_apology_slug') || sessionStorage.getItem('saybyme_proposal_slug');
 
-  // 1. Data Defaults from Session / Fallback
-  let recipient = sessionStorage.getItem('saybyme_user_name') || 'b';
-  let sender = sessionStorage.getItem('saybyme_sender_name') || 'a';
-  let whatHappened = sessionStorage.getItem('saybyme_apology_reason') || 'I ignored their messages.';
-  let apologyMessage = sessionStorage.getItem('saybyme_apology_message') || "I'm sorry for my behavior. It won't happen again. You're important to me. I'm sorry for the misunderstanding. I never wanted to upset you. Let's move forward together.";
+  // 1. Data Defaults from URL Params / Session / Fallback
+  let recipient = urlParams.get('for') || urlParams.get('to') || urlParams.get('recipient') || sessionStorage.getItem('saybyme_user_name') || 'b';
+  let sender = urlParams.get('from') || urlParams.get('sender') || sessionStorage.getItem('saybyme_sender_name') || 'a';
+  let whatHappened = urlParams.get('why') || urlParams.get('reason') || urlParams.get('question') || sessionStorage.getItem('saybyme_apology_reason') || 'I ignored their messages.';
+  let apologyMessage = urlParams.get('msg') || urlParams.get('message') || sessionStorage.getItem('saybyme_apology_message') || "I'm sorry for my behavior. It won't happen again. You're important to me. I'm sorry for the misunderstanding. I never wanted to upset you. Let's move forward together.";
   
   const specialMessage1 = "I never want a silly mistake or a moment of anger to make you question how special you are to me.";
   const specialMessage2 = "Sending you the biggest virtual hug, a little heart and the most genuine sorry I can give";
@@ -655,9 +655,12 @@ document.addEventListener('DOMContentLoaded', () => {
       stage5.style.transform = 'translateY(-12px)';
 
       setTimeout(() => {
-        const t = Date.now();
-        const targetUrl = slug ? `forgive.html?slug=${encodeURIComponent(slug)}&t=${t}` : `forgive.html?t=${t}`;
-        window.location.href = targetUrl;
+        const nextParams = new URLSearchParams(window.location.search);
+        nextParams.set('t', Date.now());
+        if (slug) nextParams.set('slug', slug);
+        if (recipient) nextParams.set('for', recipient);
+        if (sender) nextParams.set('from', sender);
+        window.location.href = `forgive.html?${nextParams.toString()}`;
       }, 200);
     });
   }
