@@ -108,11 +108,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Floating Audio Toggle Button managed by bgm.js
 
   // =========================================================================
-  // RAZORPAY LIVE PAYMENT & PRIVATE LINK UNLOCK (₹99)
+  // RAZORPAY LIVE PAYMENT & PRIVATE LINK UNLOCK (₹199 - Original ₹499)
   // =========================================================================
   const RAZORPAY_LIVE_KEY = 'rzp_live_U40IbdT5uMc3ZW';
-  const PAYMENT_AMOUNT_INR = 99;
-  const PAYMENT_AMOUNT_PAISE = 9900; // 99 INR in paise
+  const ORIGINAL_PRICE_INR = 499;
+  const PAYMENT_AMOUNT_INR = 199;
+  const PAYMENT_AMOUNT_PAISE = 19900; // 199 INR in paise (₹199)
 
   const btnContinueFinal = document.getElementById('btnContinueFinal');
   const btnUnlockText = document.getElementById('btnUnlockText');
@@ -295,18 +296,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!sdkReady || typeof window.Razorpay !== 'function') {
         alert('Payment gateway could not be loaded. Please check your internet connection.');
         btnContinueFinal.disabled = false;
-        if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+        if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹199 & Unlock Link';
         btnContinueFinal.style.opacity = '1';
         return;
       }
 
-      // 3. Configure Razorpay Options (Live Key & ₹99)
+      // 3. Configure Razorpay Options (Live Key & ₹199)
       const options = {
         key: RAZORPAY_LIVE_KEY,
         amount: PAYMENT_AMOUNT_PAISE,
         currency: 'INR',
         name: 'SayByMe',
-        description: 'Unlock Private Apology Link (₹99)',
+        description: 'Unlock Private Apology Link (₹199 • Special Offer)',
         image: 'images/mascot-bear-transparent.png',
         handler: async function (response) {
           console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
@@ -324,7 +325,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         notes: {
           sender_name: sender,
           recipient_name: recipient,
-          purpose: 'SayByMe Apology Private Link'
+          purpose: 'SayByMe Apology Private Link',
+          original_price: '499',
+          discount_price: '199'
         },
         theme: {
           color: '#d81b4f'
@@ -332,7 +335,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         modal: {
           ondismiss: function () {
             btnContinueFinal.disabled = false;
-            if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+            if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹199 & Unlock Link';
             btnContinueFinal.style.opacity = '1';
           }
         }
@@ -349,7 +352,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const desc = (failResp && failResp.error && failResp.error.description) || 'Payment cancelled or unsuccessful.';
           alert('Payment Failed: ' + desc);
           btnContinueFinal.disabled = false;
-          if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+          if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹199 & Unlock Link';
           btnContinueFinal.style.opacity = '1';
         });
         rzp.open();
@@ -357,7 +360,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to open Razorpay modal:', err);
         alert('Could not open payment dialog. Please try again.');
         btnContinueFinal.disabled = false;
-        if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+        if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹199 & Unlock Link';
         btnContinueFinal.style.opacity = '1';
       }
     });

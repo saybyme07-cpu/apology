@@ -31,12 +31,14 @@ module.exports = async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        amount: 9900, // ₹99 = 9900 paise
+        amount: 19900, // ₹199 = 19900 paise (Original ₹499, Discounted to ₹199)
         currency: 'INR',
         receipt: receipt,
         notes: {
           app: 'SayByMe',
-          service: 'Apology Private Link'
+          service: 'Apology Private Link',
+          original_price: '499',
+          discount_price: '199'
         }
       })
     });
