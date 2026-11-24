@@ -107,7 +107,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Floating Audio Toggle Button managed by bgm.js
 
-  // Continue Final Action -> Unlock & Generate Proper Web Application Preview Link
+  // =========================================================================
+  // RAZORPAY LIVE PAYMENT & PRIVATE LINK UNLOCK (₹99)
+  // =========================================================================
+  const RAZORPAY_LIVE_KEY = 'rzp_live_U40IbdT5uMc3ZW';
+  const PAYMENT_AMOUNT_INR = 99;
+  const PAYMENT_AMOUNT_PAISE = 9900; // 99 INR in paise
+
   const btnContinueFinal = document.getElementById('btnContinueFinal');
   const btnUnlockText = document.getElementById('btnUnlockText');
   const unlockPromptView = document.getElementById('unlockPromptView');
@@ -154,87 +160,212 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Dynamically load Razorpay SDK if not already loaded
+  function loadRazorpaySDK() {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true);
+      const existing = document.querySelector('script[src*="checkout.razorpay.com"]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(true));
+        existing.addEventListener('error', () => resolve(false));
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => {
+        console.error('Failed to load Razorpay SDK');
+        resolve(false);
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  // Generate and reveal private preview link after successful payment
+  async function generateAndRevealPrivateLink(paymentDetails = {}, autoOpenModal = true) {
+    if (btnUnlockText) btnUnlockText.textContent = 'Generating Private Link... ✨';
+
+    let finalSlug = slug;
+    if (!finalSlug && typeof saveApologyToConvex === 'function') {
+      try {
+        const saved = await saveApologyToConvex({
+          senderName: sender,
+          recipientName: recipient,
+          whatHappened: whatHappened,
+          message: message,
+          theme: theme,
+          sticker: sticker
+        });
+        if (saved && saved.slug) {
+          finalSlug = saved.slug;
+          sessionStorage.setItem('saybyme_apology_slug', finalSlug);
+        }
+      } catch (err) {
+        console.warn("Could not save to Convex:", err);
+      }
+    }
+
+    // If slug is still missing (offline or Convex unavailable), create robust unique slug
+    if (!finalSlug) {
+      finalSlug = 'apology_' + Math.random().toString(36).substring(2, 9);
+      sessionStorage.setItem('saybyme_apology_slug', finalSlug);
+    }
+
+    // Generate Proper Absolute Web Application Preview Link
+    const previewUrlObj = new URL('preview.html', window.location.href);
+    previewUrlObj.searchParams.set('slug', finalSlug);
+    if (sender) previewUrlObj.searchParams.set('from', sender);
+    if (recipient) previewUrlObj.searchParams.set('for', recipient);
+    if (whatHappened) previewUrlObj.searchParams.set('why', whatHappened);
+    if (message) previewUrlObj.searchParams.set('msg', message);
+    if (theme) previewUrlObj.searchParams.set('theme', theme);
+    if (sticker) previewUrlObj.searchParams.set('sticker', sticker);
+
+    const shareUrl = previewUrlObj.href;
+
+    // Update Iframe with live link
+    if (phoneIframe) {
+      phoneIframe.src = shareUrl;
+    }
+
+    // Populate Inline Unlocked Result Box
+    if (unlockedRecipientName) unlockedRecipientName.textContent = recipient;
+    if (unlockedUrlInput) unlockedUrlInput.value = shareUrl;
+    if (btnOpenLivePreview) btnOpenLivePreview.href = shareUrl;
+    if (btnShareWhatsAppInline) {
+      btnShareWhatsAppInline.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('I made something special for you ♡\n' + shareUrl)}`;
+    }
+
+    if (unlockPromptView) unlockPromptView.style.display = 'none';
+    if (unlockSuccessView) unlockSuccessView.style.display = 'block';
+
+    // Populate and Display Celebratory Modal Popup
+    if (modalRecipientDisplay) modalRecipientDisplay.textContent = recipient;
+    if (modalUrlInput) modalUrlInput.value = shareUrl;
+    if (modalOpenPreviewBtn) modalOpenPreviewBtn.href = shareUrl;
+    if (modalWhatsAppBtn) {
+      modalWhatsAppBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('I made something special for you ♡\n' + shareUrl)}`;
+    }
+
+    if (autoOpenModal && linkModalOverlay) {
+      linkModalOverlay.style.display = 'flex';
+    }
+
+    // Auto-copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      if (copyInlineText) copyInlineText.textContent = '✓ Copied!';
+      if (modalCopyText) modalCopyText.textContent = '✓ Copied to Clipboard!';
+      setTimeout(() => {
+        if (copyInlineText) copyInlineText.textContent = 'Copy';
+        if (modalCopyText) modalCopyText.textContent = 'Copy Link';
+      }, 2500);
+    } catch (err) {}
+  }
+
+  // Razorpay Checkout Trigger
   if (btnContinueFinal) {
     btnContinueFinal.addEventListener('click', async () => {
-      // 1. Loading UI Feedback
       btnContinueFinal.disabled = true;
-      if (btnUnlockText) btnUnlockText.textContent = 'Generating Private Link... ✨';
+      if (btnUnlockText) btnUnlockText.textContent = 'Opening Payment... 🔒';
       btnContinueFinal.style.opacity = '0.9';
 
-      let finalSlug = slug;
-      if (!finalSlug && typeof saveApologyToConvex === 'function') {
-        try {
-          const saved = await saveApologyToConvex({
-            senderName: sender,
-            recipientName: recipient,
-            whatHappened: whatHappened,
-            message: message,
-            theme: theme,
-            sticker: sticker
-          });
-          if (saved && saved.slug) {
-            finalSlug = saved.slug;
-            sessionStorage.setItem('saybyme_apology_slug', finalSlug);
-          }
-        } catch (err) {
-          console.warn("Could not save to Convex:", err);
-        }
-      }
-
-      // If slug is still missing (offline or Convex unavailable), create robust unique slug
-      if (!finalSlug) {
-        finalSlug = 'apology_' + Math.random().toString(36).substring(2, 9);
-        sessionStorage.setItem('saybyme_apology_slug', finalSlug);
-      }
-
-      // 2. Generate Proper Absolute Web Application Preview Link
-      const previewUrlObj = new URL('preview.html', window.location.href);
-      previewUrlObj.searchParams.set('slug', finalSlug);
-      if (sender) previewUrlObj.searchParams.set('from', sender);
-      if (recipient) previewUrlObj.searchParams.set('for', recipient);
-      if (whatHappened) previewUrlObj.searchParams.set('why', whatHappened);
-      if (message) previewUrlObj.searchParams.set('msg', message);
-      if (theme) previewUrlObj.searchParams.set('theme', theme);
-      if (sticker) previewUrlObj.searchParams.set('sticker', sticker);
-
-      const shareUrl = previewUrlObj.href;
-
-      // 3. Update Iframe with live link
-      if (phoneIframe) {
-        phoneIframe.src = shareUrl;
-      }
-
-      // 4. Populate Inline Unlocked Result Box
-      if (unlockedRecipientName) unlockedRecipientName.textContent = recipient;
-      if (unlockedUrlInput) unlockedUrlInput.value = shareUrl;
-      if (btnOpenLivePreview) btnOpenLivePreview.href = shareUrl;
-      if (btnShareWhatsAppInline) {
-        btnShareWhatsAppInline.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('I made something special for you ♡\n' + shareUrl)}`;
-      }
-
-      if (unlockPromptView) unlockPromptView.style.display = 'none';
-      if (unlockSuccessView) unlockSuccessView.style.display = 'block';
-
-      // 5. Populate and Display Celebratory Modal Popup
-      if (modalRecipientDisplay) modalRecipientDisplay.textContent = recipient;
-      if (modalUrlInput) modalUrlInput.value = shareUrl;
-      if (modalOpenPreviewBtn) modalOpenPreviewBtn.href = shareUrl;
-      if (modalWhatsAppBtn) {
-        modalWhatsAppBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent('I made something special for you ♡\n' + shareUrl)}`;
-      }
-      if (linkModalOverlay) linkModalOverlay.style.display = 'flex';
-
-      // 6. Auto-copy to clipboard
+      // 1. Try creating an Order via backend Serverless API
+      let orderId = null;
       try {
-        await navigator.clipboard.writeText(shareUrl);
-        if (copyInlineText) copyInlineText.textContent = '✓ Copied!';
-        if (modalCopyText) modalCopyText.textContent = '✓ Copied to Clipboard!';
-        setTimeout(() => {
-          if (copyInlineText) copyInlineText.textContent = 'Copy';
-          if (modalCopyText) modalCopyText.textContent = 'Copy Link';
-        }, 2500);
-      } catch (err) {}
+        const orderRes = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: PAYMENT_AMOUNT_PAISE })
+        });
+        if (orderRes.ok) {
+          const orderData = await orderRes.json();
+          if (orderData && orderData.orderId) {
+            orderId = orderData.orderId;
+            console.log('Razorpay Order created:', orderId);
+          }
+        }
+      } catch (err) {
+        console.warn('Backend order creation unavailable (local or offline), using direct client checkout:', err);
+      }
+
+      // 2. Ensure Razorpay SDK is available
+      const sdkReady = await loadRazorpaySDK();
+      if (!sdkReady || typeof window.Razorpay !== 'function') {
+        alert('Payment gateway could not be loaded. Please check your internet connection.');
+        btnContinueFinal.disabled = false;
+        if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+        btnContinueFinal.style.opacity = '1';
+        return;
+      }
+
+      // 3. Configure Razorpay Options (Live Key & ₹99)
+      const options = {
+        key: RAZORPAY_LIVE_KEY,
+        amount: PAYMENT_AMOUNT_PAISE,
+        currency: 'INR',
+        name: 'SayByMe',
+        description: 'Unlock Private Apology Link (₹99)',
+        image: 'images/mascot-bear-transparent.png',
+        handler: async function (response) {
+          console.log('Payment successful! Payment ID:', response.razorpay_payment_id);
+          sessionStorage.setItem('saybyme_payment_status', 'completed');
+          if (response.razorpay_payment_id) {
+            sessionStorage.setItem('saybyme_payment_id', response.razorpay_payment_id);
+          }
+          await generateAndRevealPrivateLink(response, true);
+        },
+        prefill: {
+          name: sender || '',
+          email: '',
+          contact: ''
+        },
+        notes: {
+          sender_name: sender,
+          recipient_name: recipient,
+          purpose: 'SayByMe Apology Private Link'
+        },
+        theme: {
+          color: '#d81b4f'
+        },
+        modal: {
+          ondismiss: function () {
+            btnContinueFinal.disabled = false;
+            if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+            btnContinueFinal.style.opacity = '1';
+          }
+        }
+      };
+
+      if (orderId) {
+        options.order_id = orderId;
+      }
+
+      try {
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (failResp) {
+          console.error('Razorpay payment failed:', failResp);
+          const desc = (failResp && failResp.error && failResp.error.description) || 'Payment cancelled or unsuccessful.';
+          alert('Payment Failed: ' + desc);
+          btnContinueFinal.disabled = false;
+          if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+          btnContinueFinal.style.opacity = '1';
+        });
+        rzp.open();
+      } catch (err) {
+        console.error('Failed to open Razorpay modal:', err);
+        alert('Could not open payment dialog. Please try again.');
+        btnContinueFinal.disabled = false;
+        if (btnUnlockText) btnUnlockText.textContent = 'Pay ₹99 & Unlock Link';
+        btnContinueFinal.style.opacity = '1';
+      }
     });
+  }
+
+  // If already paid in this session, keep the link unlocked
+  if (sessionStorage.getItem('saybyme_payment_status') === 'completed') {
+    generateAndRevealPrivateLink({ razorpay_payment_id: sessionStorage.getItem('saybyme_payment_id') }, false);
   }
 
   // Inline Copy Button
