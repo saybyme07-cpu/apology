@@ -184,6 +184,11 @@
 
             <h3 class="unlock-title">Unlock Your Private Link</h3>
 
+            <!-- Test Mode Badge (Visible in test mode) -->
+            <div class="test-mode-badge" id="testModeBadge" style="display: none;">
+              <span>🧪 Test Mode Active (Bypass Payment)</span>
+            </div>
+
             <div class="pricing-display">
               <span class="price-original">₹499</span>
               <span class="price-discount">₹199</span>
@@ -201,6 +206,11 @@
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
+            </button>
+
+            <!-- Quick One-Click Unlock Button for Admin / Test Mode -->
+            <button type="button" class="btn-test-bypass" id="btnTestBypass" style="display: none;">
+              <span>⚡ Generate & Unlock Link Free (Test Mode)</span>
             </button>
           </div>
 

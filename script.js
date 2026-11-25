@@ -1,3 +1,8 @@
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('test') === 'true' || urlParams.get('admin') === 'true' || urlParams.get('bypass') === '1' || urlParams.get('free') === '1') {
+  sessionStorage.setItem('saybyme_test_bypass', 'true');
+}
+
 const form  = document.getElementById('nameForm');
 const input = document.getElementById('name');
 const field = document.getElementById('field');

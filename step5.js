@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const slug = urlParams.get('slug') || sessionStorage.getItem('saybyme_apology_slug') || sessionStorage.getItem('saybyme_proposal_slug');
 
-  let recipient = sessionStorage.getItem('saybyme_user_name') || 'b';
-  let sender = sessionStorage.getItem('saybyme_sender_name') || 'a';
-  let whatHappened = sessionStorage.getItem('saybyme_apology_reason') || 'Will you forgive me?';
-  let message = sessionStorage.getItem('saybyme_apology_message') || "I'm so sorry for everything that happened. You mean the absolute world to me, and making things right with you is all I care about.";
-  let theme = sessionStorage.getItem('saybyme_patchup_theme') || 'kittens';
-  let sticker = sessionStorage.getItem('saybyme_patchup_sticker') || '💖 100% Sincere';
+  let recipient = urlParams.get('for') || urlParams.get('to') || urlParams.get('recipient') || sessionStorage.getItem('saybyme_user_name') || 'b';
+  let sender = urlParams.get('from') || urlParams.get('sender') || sessionStorage.getItem('saybyme_sender_name') || 'a';
+  let whatHappened = urlParams.get('why') || urlParams.get('reason') || urlParams.get('question') || sessionStorage.getItem('saybyme_apology_reason') || 'Will you forgive me?';
+  let message = urlParams.get('msg') || urlParams.get('message') || sessionStorage.getItem('saybyme_apology_message') || "I'm so sorry for everything that happened. You mean the absolute world to me, and making things right with you is all I care about.";
+  let theme = urlParams.get('theme') || sessionStorage.getItem('saybyme_patchup_theme') || 'kittens';
+  let sticker = urlParams.get('sticker') || sessionStorage.getItem('saybyme_patchup_sticker') || '💖 100% Sincere';
 
   // If slug exists, fetch live record from Convex apologies table
   if (slug && typeof getApologyFromConvex === 'function') {
@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   function getPreviewUrl() {
     const params = new URLSearchParams();
     if (slug) params.set('slug', slug);
+    if (sender) params.set('from', sender);
+    if (recipient) params.set('for', recipient);
+    if (whatHappened) params.set('why', whatHappened);
+    if (message) params.set('msg', message);
+    if (theme) params.set('theme', theme);
+    if (sticker) params.set('sticker', sticker);
     params.set('t', Date.now());
     return `preview.html?${params.toString()}`;
   }
@@ -265,9 +271,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) {}
   }
 
+  // Test / Admin Mode Detection (Allows free link generation for testing)
+  const isTestMode = urlParams.get('test') === 'true' ||
+                     urlParams.get('admin') === 'true' ||
+                     urlParams.get('bypass') === '1' ||
+                     urlParams.get('free') === '1' ||
+                     sessionStorage.getItem('saybyme_test_bypass') === 'true';
+
+  if (isTestMode) {
+    sessionStorage.setItem('saybyme_test_bypass', 'true');
+    const testModeBadge = document.getElementById('testModeBadge');
+    if (testModeBadge) testModeBadge.style.display = 'inline-flex';
+    const btnTestBypass = document.getElementById('btnTestBypass');
+    if (btnTestBypass) {
+      btnTestBypass.style.display = 'inline-flex';
+      btnTestBypass.addEventListener('click', async (e) => {
+        e.preventDefault();
+        btnTestBypass.disabled = true;
+        btnTestBypass.textContent = 'Unlocking Test Link... ✨';
+        sessionStorage.setItem('saybyme_payment_status', 'completed');
+        sessionStorage.setItem('saybyme_payment_id', 'test_bypass_' + Date.now());
+        await generateAndRevealPrivateLink({ razorpay_payment_id: 'test_bypass_' + Date.now() }, true);
+      });
+    }
+  }
+
   // Razorpay Checkout Trigger
   if (btnContinueFinal) {
     btnContinueFinal.addEventListener('click', async () => {
+      // If in test mode, bypass payment entirely
+      if (isTestMode) {
+        console.log('Test mode bypass: unlocking private link without Razorpay payment');
+        if (btnUnlockText) btnUnlockText.textContent = 'Unlocking Test Link... ✨';
+        sessionStorage.setItem('saybyme_payment_status', 'completed');
+        sessionStorage.setItem('saybyme_payment_id', 'test_bypass_' + Date.now());
+        await generateAndRevealPrivateLink({ razorpay_payment_id: 'test_bypass_' + Date.now() }, true);
+        return;
+      }
+
       btnContinueFinal.disabled = true;
       if (btnUnlockText) btnUnlockText.textContent = 'Opening Payment... 🔒';
       btnContinueFinal.style.opacity = '0.9';

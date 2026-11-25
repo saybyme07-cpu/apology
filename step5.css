@@ -1420,3 +1420,45 @@ body {
     right: 4px !important;
   }
 }
+
+/* ==========================================================================
+   TEST / ADMIN MODE CONTROLS (BYPASS PAYMENT)
+   ========================================================================== */
+.test-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #fdf2f5;
+  color: #ad1457;
+  border: 1.5px solid #f8bbd0;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+}
+
+.btn-test-bypass {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1.5px dashed #d12957;
+  background: rgba(255, 235, 243, 0.95);
+  color: #a0153e;
+  font: 600 13.5px 'Poppins', sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(216, 27, 79, 0.12);
+  transition: all 0.2s ease;
+}
+
+.btn-test-bypass:hover {
+  background: #ffe3ed;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(216, 27, 79, 0.2);
+}
