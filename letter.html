@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="letter.css?v=120">
+<link rel="stylesheet" href="letter.css?v=121">
 </head>
 <body>
 
@@ -29,30 +29,24 @@
 <div class="letter-viewport">
 
   <!-- =========================================================================
-       FLOATING APOLOGY & BREAKUP EMOJIS BACKGROUND LAYER
+       FLOATING APOLOGY & BREAKUP EMOJIS BACKGROUND LAYER (Confined to Outer Edges)
        ========================================================================= -->
   <div class="floating-emojis-bg" aria-hidden="true">
-    <span class="drift-emoji" style="--l: 8%; --d: 0s; --s: 14s; --sz: 25px;">🥺</span>
-    <span class="drift-emoji" style="--l: 24%; --d: 3.2s; --s: 16s; --sz: 28px;">💔</span>
-    <span class="drift-emoji" style="--l: 40%; --d: 1.5s; --s: 13.5s; --sz: 24px;">❤️‍🩹</span>
-    <span class="drift-emoji" style="--l: 58%; --d: 5.2s; --s: 15.5s; --sz: 26px;">🥀</span>
-    <span class="drift-emoji" style="--l: 75%; --d: 2.1s; --s: 14.5s; --sz: 22px;">🩹</span>
-    <span class="drift-emoji" style="--l: 90%; --d: 6.8s; --s: 15s; --sz: 27px;">🕊️</span>
-    <span class="drift-emoji" style="--l: 14%; --d: 7.8s; --s: 16s; --sz: 23px;">🙏</span>
-    <span class="drift-emoji" style="--l: 32%; --d: 9.5s; --s: 14s; --sz: 22px;">💧</span>
-    <span class="drift-emoji" style="--l: 48%; --d: 4.4s; --s: 17s; --sz: 28px;">🥺</span>
-    <span class="drift-emoji" style="--l: 66%; --d: 8.7s; --s: 14.5s; --sz: 25px;">❤️‍🩹</span>
-    <span class="drift-emoji" style="--l: 84%; --d: 10.8s; --s: 16s; --sz: 24px;">🥀</span>
-    <span class="drift-emoji" style="--l: 4%; --d: 11.5s; --s: 15s; --sz: 26px;">💔</span>
-    <span class="drift-emoji" style="--l: 52%; --d: 12.8s; --s: 13.5s; --sz: 21px;">💭</span>
-    <span class="drift-emoji" style="--l: 70%; --d: 1.8s; --s: 18s; --sz: 23px;">🌸</span>
-    <span class="drift-emoji" style="--l: 20%; --d: 13.2s; --s: 15.5s; --sz: 20px;">✨</span>
+    <!-- Left Border Emoji Stream (Completely Outside Content) -->
+    <span class="drift-emoji" style="--l: 2%; --d: 0s; --s: 14s; --sz: 20px;">🥺</span>
+    <span class="drift-emoji" style="--l: 5%; --d: 3.5s; --s: 16s; --sz: 18px;">💔</span>
+    <span class="drift-emoji" style="--l: 1%; --d: 7.2s; --s: 15s; --sz: 20px;">❤️‍🩹</span>
+    <span class="drift-emoji" style="--l: 4%; --d: 1.8s; --s: 13.5s; --sz: 19px;">🥀</span>
+    <span class="drift-emoji" style="--l: 3%; --d: 10.5s; --s: 16.5s; --sz: 18px;">🩹</span>
+    <span class="drift-emoji" style="--l: 2%; --d: 5.2s; --s: 14.5s; --sz: 20px;">🕊️</span>
 
-    <!-- Ambient Corner Emojis with Gentle Hover -->
-    <span class="ambient-emoji corner-tl">🥺</span>
-    <span class="ambient-emoji corner-tr">❤️‍🩹</span>
-    <span class="ambient-emoji corner-bl">🥀</span>
-    <span class="ambient-emoji corner-br">🩹</span>
+    <!-- Right Border Emoji Stream (Completely Outside Content) -->
+    <span class="drift-emoji" style="--l: 93%; --d: 1s; --s: 14.5s; --sz: 20px;">🥺</span>
+    <span class="drift-emoji" style="--l: 96%; --d: 4.2s; --s: 15.5s; --sz: 19px;">❤️‍🩹</span>
+    <span class="drift-emoji" style="--l: 91%; --d: 8.5s; --s: 14s; --sz: 20px;">🥀</span>
+    <span class="drift-emoji" style="--l: 95%; --d: 2.4s; --s: 16s; --sz: 18px;">💔</span>
+    <span class="drift-emoji" style="--l: 92%; --d: 6.8s; --s: 13.5s; --sz: 19px;">🙏</span>
+    <span class="drift-emoji" style="--l: 97%; --d: 11.2s; --s: 15s; --sz: 20px;">🌸</span>
   </div>
   
   <!-- =========================================================================
@@ -113,14 +107,7 @@
             Dearest <span class="recipient-name"></span>, <span class="heart-symbol">♡</span>
           </h1>
 
-          <div class="letter-block apology-block">
-            <span class="block-tag apology-tag">My Apology:</span>
-            <div class="typed-message-area">
-              <p class="typed-text" id="typedApologyMessage"></p><span class="typing-cursor" id="cursor2">|</span>
-            </div>
-          </div>
-
-          <!-- Continuous Right-To-Left Scrolling GIF Marquee -->
+          <!-- Continuous Right-To-Left Scrolling GIF Marquee (ON TOP) -->
           <div class="gif-scroll-marquee-wrap" id="gifMarqueeWrap">
             <div class="gif-marquee-track">
               <!-- Set 1 of Tenor GIFs -->
@@ -131,6 +118,14 @@
               <div class="gif-item"><img src="images/peach-goma-transparent.gif" alt="Peach Goma Sorry"></div>
               <div class="gif-item"><img src="images/bubu-dudu-transparent.gif" alt="Bubu Dudu Sorry"></div>
               <div class="gif-item"><img src="images/texted-too-much-transparent.gif" alt="Texted Too Much"></div>
+            </div>
+          </div>
+
+          <!-- Apology Content BELOW GIFs -->
+          <div class="letter-block apology-block">
+            <span class="block-tag apology-tag">My Apology:</span>
+            <div class="typed-message-area">
+              <p class="typed-text" id="typedApologyMessage"></p><span class="typing-cursor" id="cursor2">|</span>
             </div>
           </div>
 
