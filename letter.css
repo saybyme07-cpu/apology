@@ -1,14 +1,20 @@
 /* ==========================================================================
-   SayByMe – Full-Screen Mobile Fit Letter (Compact, Always Visible Next Button)
+   SayByMe – Apology Letter (Middle Aligned, Boxless, Rich Romantic Background & Floating Emojis)
    ========================================================================== */
 
 :root {
   --rose: #f0446f;
   --crimson: #d81b4f;
-  --crimson-gradient: linear-gradient(135deg, #f0446f 0%, #d81b4f 50%, #b8123f 100%);
-  --ink: #2b1224;
-  --paper-bg: #fffdfa;
-  --paper-linear: linear-gradient(180deg, #fffcf9 0%, #fffdfa 40%, #fff7f9 100%);
+  --crimson-gradient: linear-gradient(135deg, #f0446f 0%, #d81b4f 55%, #ad0d3a 100%);
+  --crimson-glow: rgba(216, 27, 79, 0.38);
+  --ink: #2b0e1f;
+  --ink-soft: #7a3550;
+
+  /* Rich, warm romantic blush background palette */
+  --bg-top: #fedce8;
+  --bg-mid: #fecfda;
+  --bg-accent: #f8bfd6;
+  --bg-bottom: #f0accf;
 }
 
 * {
@@ -29,7 +35,12 @@ html, body {
   touch-action: manipulation;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
-  background-color: var(--paper-bg);
+  background-color: var(--bg-top);
+  background: radial-gradient(circle at 18% 15%, rgba(255, 235, 245, 0.85) 0%, transparent 45%),
+    radial-gradient(circle at 82% 80%, rgba(253, 185, 218, 0.65) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 242, 248, 0.5) 0%, transparent 60%),
+    linear-gradient(168deg, #fedce8 0%, #fecfda 28%, #f8bfd6 65%, #f0accf 100%);
+  background-attachment: fixed;
 }
 
 html::-webkit-scrollbar,
@@ -40,32 +51,111 @@ body::-webkit-scrollbar,
   height: 0 !important;
 }
 
-/* Entire Phone Fit Viewport - No Cloud Background on Letter Page */
+/* ==========================================================================
+   FLOATING APOLOGY & BREAKUP EMOJIS BACKGROUND
+   ========================================================================== */
+.floating-emojis-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.drift-emoji {
+  position: absolute;
+  bottom: -50px;
+  left: var(--l, 50%);
+  font-size: var(--sz, 24px);
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: floatEmojiDrift var(--s, 14s) cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: var(--d, 0s);
+  filter: drop-shadow(0 4px 10px rgba(216, 27, 79, 0.16));
+}
+
+@keyframes floatEmojiDrift {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(0.85);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-55vh) rotate(-10deg) scale(1.05);
+    opacity: 0.7;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-115vh) rotate(15deg) scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Ambient Corner Emojis with Gentle Hover */
+.ambient-emoji {
+  position: absolute;
+  font-size: 25px;
+  opacity: 0.45;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 8px rgba(216, 27, 79, 0.12));
+  animation: ambientFloat 6s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+.ambient-emoji.corner-tl { top: 12%; left: 8%; animation-delay: 0s; font-size: 26px; }
+.ambient-emoji.corner-tr { top: 14%; right: 9%; animation-delay: 1.5s; font-size: 28px; }
+.ambient-emoji.corner-bl { bottom: 15%; left: 7%; animation-delay: 3s; font-size: 26px; }
+.ambient-emoji.corner-br { bottom: 18%; right: 8%; animation-delay: 4.5s; font-size: 25px; }
+
+@keyframes ambientFloat {
+  0% {
+    transform: translateY(0) rotate(-6deg) scale(1);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-14px) rotate(8deg) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+/* ==========================================================================
+   VIEWPORT & FULL PHONE VERTICAL CENTERING
+   ========================================================================== */
 .letter-viewport {
   position: relative;
   width: 100%;
   min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
   padding: 0;
   margin: 0;
-  background: var(--paper-linear);
+  background: transparent;
+  overflow-x: hidden;
 }
 
 /* Audio Toggle Button in Bottom-Right */
 .audio-btn {
   position: fixed;
-  bottom: 16px;
-  right: 16px;
-  width: 42px;
-  height: 42px;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1.5px solid rgba(240, 68, 111, 0.2);
-  box-shadow: 0 4px 14px rgba(216, 27, 79, 0.18);
+  border: 1.5px solid rgba(240, 68, 111, 0.22);
+  box-shadow: 0 4px 16px rgba(216, 27, 79, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,322 +169,292 @@ body::-webkit-scrollbar,
   background: #ffffff;
 }
 
-/* Scene Stages (Page 1 vs Page 2) - FITS ENTIRE PHONE */
+/* Scene Stages - Vertically Centered in Middle of Screen */
 .scene-stage {
   width: 100%;
   min-height: 100svh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: max(24px, env(safe-area-inset-top) + 16px) 20px max(32px, env(safe-area-inset-bottom) + 20px) 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10;
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-/* ==========================================================================
-   FULL-PHONE LETTER ROLL-DOWN STAGE
-   ========================================================================== */
+/* Roll-down stage container */
 .roll-down-stage {
   position: relative;
   width: 100%;
-  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  margin: auto 0;
 }
 
-/* Letter Paper Sheet Fits 100% of Phone */
+/* Letter Paper Sheet - Completely transparent and centered */
 .letter-paper-sheet {
   position: relative;
   width: 100%;
-  flex: 1;
-  min-height: 100svh;
-  min-height: 100dvh;
-  background: var(--paper-linear);
+  max-width: 440px;
+  min-height: auto;
+  background: transparent !important;
   border-radius: 0;
-  border: none;
-  box-shadow: none;
-  overflow-x: hidden;
-  -webkit-clip-path: inset(0 0 0% 0);
-  clip-path: inset(0 0 0% 0);
-}
-
-/* Roll-down triggered via is-rolling */
-.roll-down-stage.is-rolling .letter-paper-sheet {
-  -webkit-animation: unrollPaperSheetFull 2.2s cubic-bezier(0.25, 0.9, 0.32, 1) 1 both;
-  animation: unrollPaperSheetFull 2.2s cubic-bezier(0.25, 0.9, 0.32, 1) 1 both;
-}
-
-@-webkit-keyframes unrollPaperSheetFull {
-  0% {
-    -webkit-clip-path: inset(0 0 100% 0);
-    clip-path: inset(0 0 100% 0);
-  }
-  100% {
-    -webkit-clip-path: inset(0 0 0% 0);
-    clip-path: inset(0 0 0% 0);
-  }
-}
-
-@keyframes unrollPaperSheetFull {
-  0% {
-    -webkit-clip-path: inset(0 0 100% 0);
-    clip-path: inset(0 0 100% 0);
-  }
-  100% {
-    -webkit-clip-path: inset(0 0 0% 0);
-    clip-path: inset(0 0 0% 0);
-  }
-}
-
-.paper-top-lip {
-  width: 100%;
-  height: 5px;
-  background: linear-gradient(90deg, #f7d5de 0%, #fadfe6 50%, #f7d5de 100%);
-  opacity: 0.8;
-}
-
-/* Full-Width Paper Roll Curl */
-.moving-paper-roll {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 26px;
-  top: 0;
-  pointer-events: none;
-  z-index: 20;
-  opacity: 0;
-}
-
-.roll-down-stage.is-rolling .moving-paper-roll {
-  -webkit-animation: rollCylinderTravelFull 2.2s cubic-bezier(0.25, 0.9, 0.32, 1) 1 both;
-  animation: rollCylinderTravelFull 2.2s cubic-bezier(0.25, 0.9, 0.32, 1) 1 both;
-}
-
-@-webkit-keyframes rollCylinderTravelFull {
-  0% {
-    top: 0;
-    opacity: 1;
-    -webkit-transform: translateY(0) scaleY(1);
-    transform: translateY(0) scaleY(1);
-  }
-  80% {
-    opacity: 1;
-    -webkit-transform: translateY(0) scaleY(1);
-    transform: translateY(0) scaleY(1);
-  }
-  95% {
-    top: calc(100% - 20px);
-    opacity: 0.6;
-    -webkit-transform: translateY(0) scaleY(0.7);
-    transform: translateY(0) scaleY(0.7);
-  }
-  100% {
-    top: calc(100% - 6px);
-    opacity: 0;
-    -webkit-transform: translateY(2px) scaleY(0.2);
-    transform: translateY(2px) scaleY(0.2);
-  }
-}
-
-@keyframes rollCylinderTravelFull {
-  0% {
-    top: 0;
-    opacity: 1;
-    -webkit-transform: translateY(0) scaleY(1);
-    transform: translateY(0) scaleY(1);
-  }
-  80% {
-    opacity: 1;
-    -webkit-transform: translateY(0) scaleY(1);
-    transform: translateY(0) scaleY(1);
-  }
-  95% {
-    top: calc(100% - 20px);
-    opacity: 0.6;
-    -webkit-transform: translateY(0) scaleY(0.7);
-    transform: translateY(0) scaleY(0.7);
-  }
-  100% {
-    top: calc(100% - 6px);
-    opacity: 0;
-    -webkit-transform: translateY(2px) scaleY(0.2);
-    transform: translateY(2px) scaleY(0.2);
-  }
-}
-
-.roll-cylinder {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 0;
-  background: linear-gradient(
-    180deg,
-    #f4dbc9 0%,
-    #ffffff 28%,
-    #f8e5d6 65%,
-    #cca385 100%
-  );
-  box-shadow: 0 6px 14px rgba(180, 50, 80, 0.22);
-}
-
-.roll-crease-line {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(200, 150, 120, 0.3);
-}
-
-.roll-drop-shadow {
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 100%;
-  height: 12px;
-  background: radial-gradient(ellipse at 50% 50%, rgba(160, 40, 70, 0.35) 0%, transparent 70%);
-  filter: blur(2px);
-}
-
-/* Inner Sheet Content - Compact & Fits into Screen Cleanly */
-.sheet-content {
-  flex: 1;
+  border: none !important;
+  box-shadow: none !important;
   display: flex;
   flex-direction: column;
-  padding: max(18px, env(safe-area-inset-top) + 6px) max(16px, env(safe-area-inset-right)) max(68px, env(safe-area-inset-bottom) + 50px) max(16px, env(safe-area-inset-left));
-  max-width: 500px;
-  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+/* Smooth fade and subtle float on stage entry */
+.roll-down-stage.is-rolling .letter-paper-sheet {
+  -webkit-animation: fadeInLetterSmooth 0.8s cubic-bezier(0.25, 0.9, 0.32, 1) 1 both;
+  animation: fadeInLetterSmooth 0.8s cubic-bezier(0.25, 0.9, 0.32, 1) 1 both;
+}
+
+@-webkit-keyframes fadeInLetterSmooth {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(16px) scale(0.98);
+    transform: translateY(16px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInLetterSmooth {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hide legacy paper rolls */
+.paper-top-lip,
+.moving-paper-roll {
+  display: none !important;
+}
+
+/* Inner Sheet Content - Clean, centered layout */
+.sheet-content {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  margin: auto 0;
+  padding: 0;
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 }
 
 /* Greeting */
 .letter-greeting {
   font-family: 'Caveat', cursive;
-  font-size: clamp(24px, 6.8vw, 30px);
-  color: #851c3f;
-  line-height: 1.2;
-  margin-bottom: clamp(8px, 2.5vw, 14px);
+  font-size: clamp(32px, 8.5vw, 42px);
+  color: #781537;
+  line-height: 1.25;
+  margin-bottom: 16px;
   font-weight: 700;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.45);
 }
 
 .heart-symbol {
   color: var(--rose);
-  font-size: 24px;
+  font-size: clamp(26px, 7vw, 32px);
   vertical-align: middle;
+  display: inline-block;
+  animation: gentleHeartBeat 2.2s ease-in-out infinite;
 }
 
-/* Letter Section Blocks - Fixed, Stable Dimensions */
+@keyframes gentleHeartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* ==========================================================================
+   NO BOX - CLEAN, FLOWING PERSONAL LETTER STYLING
+   ========================================================================== */
 .letter-block {
-  margin-bottom: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(255, 246, 248, 0.85);
-  border: 1px solid #f9d8e1;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
   transition: none !important;
 }
 
 .what-happened-block {
-  min-height: 100px;
+  min-height: 80px;
 }
 
 .apology-block {
-  min-height: 110px;
+  min-height: 90px;
 }
 
+/* Romantic subtitle instead of harsh box pill */
 .block-tag {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
+  display: block;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-size: clamp(12px, 3.4vw, 13.5px);
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: #a83656;
-  background: #fde2e9;
-  padding: 2px 8px;
-  border-radius: 6px;
-  margin-bottom: 6px;
+  letter-spacing: 2px;
+  color: #9c274f;
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  margin-bottom: 12px;
+  opacity: 0.92;
 }
 
 .block-tag.apology-tag {
-  color: #c4153f;
-  background: #fcd5df;
+  color: #bd1a48;
 }
 
-/* Typed message areas */
+/* Typed message areas - Large, expressive text */
 .typed-message-area {
   position: relative;
   min-height: 48px;
+  width: 100%;
 }
 
 .typed-text {
-  font-size: clamp(13.5px, 3.8vw, 15px);
-  line-height: 1.65;
-  color: #381a29;
-  font-weight: 400;
-  display: inline-block;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-size: clamp(18px, 4.8vw, 22px);
+  line-height: 1.75;
+  color: #2b0e1f;
+  font-weight: 500;
+  display: inline;
   word-break: break-word;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-/* Sincere Sign-off */
+.typing-cursor {
+  font-size: clamp(18px, 4.8vw, 22px);
+  color: var(--crimson);
+  font-weight: 300;
+  margin-left: 2px;
+  animation: blinkCursor 0.8s infinite;
+}
+
+.typing-cursor.done {
+  display: none;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Sincere Sign-off - Clean handwriting style, no dashed line */
 .letter-signoff {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed #f6cbd7;
+  margin-top: 16px;
+  padding-top: 6px;
+  border-top: none !important;
   text-align: right;
   opacity: 1;
+  width: 100%;
 }
 
 .signoff-note {
   display: block;
-  font-size: 12.5px;
-  color: #8c586e;
+  font-size: clamp(14px, 3.8vw, 16px);
+  color: #833957;
   font-style: italic;
+  font-weight: 400;
+  margin-bottom: 2px;
 }
 
 .sender-signature {
   font-family: 'Caveat', cursive;
-  font-size: 26px;
+  font-size: clamp(30px, 8vw, 38px);
   color: var(--crimson);
   font-weight: 700;
+  line-height: 1.2;
+  display: inline-block;
 }
 
 /* ==========================================================================
-   NEXT BUTTON - PROMINENT & VISIBLE IMMEDIATELY (NOT DOWNWARDS)
+   NEXT BUTTON - PROMINENT, CLIENT-ATTRACTIVE WITH GENTLE GLOW
    ========================================================================== */
 .next-btn-wrap {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 16px;
-  margin-bottom: 6px;
-  opacity: 1 !important;
-  transform: none !important;
+  align-items: center;
+  margin-top: 26px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 20;
 }
 
 .btn-next-scene {
   border: 0;
   cursor: pointer;
-  padding: clamp(11px, 3vw, 13px) clamp(28px, 8vw, 36px);
+  padding: clamp(14px, 3.8vw, 16px) clamp(34px, 9vw, 44px);
   border-radius: 999px;
-  font: 600 clamp(14px, 3.8vw, 15px) 'Poppins', sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: clamp(15px, 4vw, 16.5px);
+  letter-spacing: 0.2px;
   background: var(--crimson-gradient);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  box-shadow: 0 6px 20px rgba(216, 27, 79, 0.35);
+  box-shadow: 0 8px 24px rgba(216, 27, 79, 0.38), 0 2px 6px rgba(216, 27, 79, 0.2);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: btnGentlePulse 3.5s ease-in-out infinite;
 }
 
 .btn-next-scene:hover {
   transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 10px 24px rgba(216, 27, 79, 0.45);
+  box-shadow: 0 12px 28px rgba(216, 27, 79, 0.48), 0 4px 10px rgba(216, 27, 79, 0.25);
+}
+
+.btn-next-scene:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+@keyframes btnGentlePulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(216, 27, 79, 0.38), 0 0 0 0 rgba(240, 68, 111, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 28px rgba(216, 27, 79, 0.48), 0 0 0 8px rgba(240, 68, 111, 0);
+  }
 }
 
 /* ==========================================================================
-   CONTINUOUS RIGHT-TO-LEFT SCROLLING GIF MARQUEE (100% Transparent to Background)
+   CONTINUOUS RIGHT-TO-LEFT SCROLLING GIF MARQUEE (Page 2)
    ========================================================================== */
 .gif-scroll-marquee-wrap {
   margin: 14px 0 12px 0;
@@ -404,6 +464,7 @@ body::-webkit-scrollbar,
   border: none !important;
   box-shadow: none !important;
   padding: 4px 0;
+  width: 100%;
 }
 
 .gif-marquee-track {
@@ -448,78 +509,73 @@ body::-webkit-scrollbar,
   object-fit: contain;
   background: transparent !important;
   display: block;
-  filter: drop-shadow(0 4px 8px rgba(180, 50, 80, 0.1));
+  filter: drop-shadow(0 4px 10px rgba(216, 27, 79, 0.12));
 }
 
-/* Responsive adjustments */
-@media (max-width: 420px) {
-  .sheet-content {
-    padding: max(16px, env(safe-area-inset-top) + 6px) 14px max(68px, env(safe-area-inset-bottom) + 50px) 14px;
-  }
-  .letter-greeting {
-    font-size: 26px;
-  }
-  .gif-item {
-    width: 105px;
-    height: 90px;
-  }
-  .btn-next-scene {
-    padding: 12px 28px;
-    font-size: 14px;
-    min-height: 44px;
-  }
-}
-
-/* Special GIF Wrap on Page 3 */
+/* ==========================================================================
+   SPECIAL GIFS & STAGES (Pages 3, 4, 5)
+   ========================================================================== */
 .special-gif-wrap {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 4px auto 10px auto;
+  margin: 4px auto 14px auto;
 }
 
 .special-gif-img {
-  width: clamp(105px, 28vw, 135px);
+  width: clamp(115px, 30vw, 145px);
   max-width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 6px 14px rgba(216, 27, 79, 0.12));
+  filter: drop-shadow(0 8px 18px rgba(216, 27, 79, 0.16));
 }
 
-.special-block {
-  min-height: 90px;
-}
-
-.block-tag.special-tag {
-  color: #a8244a;
-  background: #fde2eb;
-}
-
-/* Hug GIF and Block on Page 4 */
-.hug-gif-img {
-  width: clamp(110px, 30vw, 140px);
-}
-
-.hug-block {
-  min-height: 85px;
-}
-
-.block-tag.hug-tag {
-  color: #a8244a;
-  background: #fde2eb;
-}
-
-/* Story GIF and Block on Page 5 */
-.story-gif-img {
-  width: clamp(115px, 32vw, 145px);
-}
-
+.special-block,
+.hug-block,
 .story-block {
-  min-height: 85px;
+  min-height: 80px;
 }
 
+.block-tag.special-tag,
+.block-tag.hug-tag,
 .block-tag.story-tag {
-  color: #a8244a;
-  background: #fde2eb;
+  color: #ad2750;
+}
+
+.hug-gif-img {
+  width: clamp(120px, 32vw, 150px);
+}
+
+.story-gif-img {
+  width: clamp(125px, 34vw, 155px);
+}
+
+/* ==========================================================================
+   RESPONSIVE OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 480px) {
+  .scene-stage {
+    padding: max(20px, env(safe-area-inset-top) + 12px) 18px max(28px, env(safe-area-inset-bottom) + 16px) 18px;
+  }
+  .gif-item {
+    width: 110px;
+    height: 95px;
+  }
+}
+
+@media (max-height: 640px) {
+  .scene-stage {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  .letter-greeting {
+    margin-bottom: 8px;
+  }
+  .letter-block {
+    margin-bottom: 12px;
+  }
+  .next-btn-wrap {
+    margin-top: 14px;
+  }
 }

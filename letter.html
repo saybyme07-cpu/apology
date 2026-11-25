@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="letter.css?v=110">
+<link rel="stylesheet" href="letter.css?v=120">
 </head>
 <body>
 
@@ -27,6 +27,33 @@
 </button>
 
 <div class="letter-viewport">
+
+  <!-- =========================================================================
+       FLOATING APOLOGY & BREAKUP EMOJIS BACKGROUND LAYER
+       ========================================================================= -->
+  <div class="floating-emojis-bg" aria-hidden="true">
+    <span class="drift-emoji" style="--l: 8%; --d: 0s; --s: 14s; --sz: 25px;">🥺</span>
+    <span class="drift-emoji" style="--l: 24%; --d: 3.2s; --s: 16s; --sz: 28px;">💔</span>
+    <span class="drift-emoji" style="--l: 40%; --d: 1.5s; --s: 13.5s; --sz: 24px;">❤️‍🩹</span>
+    <span class="drift-emoji" style="--l: 58%; --d: 5.2s; --s: 15.5s; --sz: 26px;">🥀</span>
+    <span class="drift-emoji" style="--l: 75%; --d: 2.1s; --s: 14.5s; --sz: 22px;">🩹</span>
+    <span class="drift-emoji" style="--l: 90%; --d: 6.8s; --s: 15s; --sz: 27px;">🕊️</span>
+    <span class="drift-emoji" style="--l: 14%; --d: 7.8s; --s: 16s; --sz: 23px;">🙏</span>
+    <span class="drift-emoji" style="--l: 32%; --d: 9.5s; --s: 14s; --sz: 22px;">💧</span>
+    <span class="drift-emoji" style="--l: 48%; --d: 4.4s; --s: 17s; --sz: 28px;">🥺</span>
+    <span class="drift-emoji" style="--l: 66%; --d: 8.7s; --s: 14.5s; --sz: 25px;">❤️‍🩹</span>
+    <span class="drift-emoji" style="--l: 84%; --d: 10.8s; --s: 16s; --sz: 24px;">🥀</span>
+    <span class="drift-emoji" style="--l: 4%; --d: 11.5s; --s: 15s; --sz: 26px;">💔</span>
+    <span class="drift-emoji" style="--l: 52%; --d: 12.8s; --s: 13.5s; --sz: 21px;">💭</span>
+    <span class="drift-emoji" style="--l: 70%; --d: 1.8s; --s: 18s; --sz: 23px;">🌸</span>
+    <span class="drift-emoji" style="--l: 20%; --d: 13.2s; --s: 15.5s; --sz: 20px;">✨</span>
+
+    <!-- Ambient Corner Emojis with Gentle Hover -->
+    <span class="ambient-emoji corner-tl">🥺</span>
+    <span class="ambient-emoji corner-tr">❤️‍🩹</span>
+    <span class="ambient-emoji corner-bl">🥀</span>
+    <span class="ambient-emoji corner-br">🩹</span>
+  </div>
   
   <!-- =========================================================================
        PAGE 1: WHAT HAPPENED LETTER + VISIBLE NEXT BUTTON (NO SCROLL DOWN NEEDED)
@@ -358,14 +385,14 @@ document.addEventListener('DOMContentLoaded', () => {
     bgm.addEventListener('pause', () => { isAudioPlaying = false; });
   }
 
-  // Helper to make the message box 100% STATIC so it never resizes, expands, or bounces while typing
+  // Helper to make the message area STATIC so it never resizes, expands, or bounces while typing
   function lockStaticBox(blockEl, textEl, fullText) {
     if (!blockEl || !textEl) return;
     textEl.textContent = fullText;
     const h = blockEl.offsetHeight;
     if (h > 0) {
-      blockEl.style.height = h + 'px';
       blockEl.style.minHeight = h + 'px';
+      blockEl.style.height = 'auto';
     }
     textEl.textContent = '';
   }
@@ -733,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       isTyping1 = true;
       typeWhatHappened(0);
-    }, 1700);
+    }, 600);
   }
 });
 

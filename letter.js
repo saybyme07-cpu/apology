@@ -69,14 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Helper to make the message box 100% STATIC so it never resizes, expands, or bounces while typing
+  // Helper to make the message area STATIC so it never resizes, expands, or bounces while typing
   function lockStaticBox(blockEl, textEl, fullText) {
     if (!blockEl || !textEl) return;
     textEl.textContent = fullText;
     const h = blockEl.offsetHeight;
     if (h > 0) {
-      blockEl.style.height = h + 'px';
       blockEl.style.minHeight = h + 'px';
+      blockEl.style.height = 'auto';
     }
     textEl.textContent = '';
   }
@@ -474,6 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       isTyping1 = true;
       typeWhatHappened(0);
-    }, 1700);
+    }, 600);
   }
 });
